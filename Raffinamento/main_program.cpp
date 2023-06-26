@@ -11,6 +11,7 @@ int main()
 //  int n = 5; // poi da cambiare: probabilmente è la size di vectsupp in heapsort
     vector<Cells::Cell2D> vectSupp;
 
+    Import();
     for (int iter = 0; iter<numeroIterazioni; iter++) {
         HeapSort(vectSupp);
         for (int i = 0; i < howMany; i++) {
