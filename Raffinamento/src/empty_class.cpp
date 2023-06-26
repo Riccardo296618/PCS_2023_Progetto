@@ -29,6 +29,8 @@ bool Import()
     return 0;
 }
 
+
+
 bool ImportCell0Ds()
 {
 
@@ -245,15 +247,11 @@ double Cells::Cell1D::LengthEdge(){
 //PROBLEMA TOLLERANZA
 unsigned int Cells::Cell2D::maxedge(){
     unsigned int indmax = 0;
-    double max = 0.0;
-    array<double, 3> lenedges = {0, 0, 0};
-    for (unsigned int i = 0; i<3; i++)
-    {
-        lenedges[i] = mesh.LengthEdges[Edges[i]];
-        if(lenedges[i] > max)
-        {
-            max = lenedges[i];
-            indmax = Edges[i]; // oppure indmax = i         NON SO SE HA PIU' SENSO CHE RESTITUISCA L'ID DEL LATO O IL SUO INDICE NEL VETTORE DA TRE
+    double* max = &(mesh.LengthEdges[Edges[0]]);
+    for (unsigned int i = 1; i<3; i++){
+        if(mesh.LengthEdges[Edges[i]] > *max){  // check
+            max = &(mesh.LengthEdges[Edges[i]]);
+            indmax = Edges[i];
         }
     }
     return indmax;
@@ -285,21 +283,25 @@ MatrAdiac::MatrAdiac() {
 
 
 
-void MakeHeap(vector<Cells::Cell2D> vecttSupp, int i){
+
+
+void MakeHeap(vector<Cells::Cell2D*> vecttSupp, int i){
 
     vecttSupp.clear();
-    vecttSupp = mesh.vectt;
+    for (unsigned int k = 0; k < mesh.vectt.size(); k++){
+        vecttSupp.push_back(&mesh.vectt[k]);
+    }
 
     int max = i;
     unsigned int l = 2 * i + 1;
     unsigned int r = 2 * i + 2;
 
-    if (l < vecttSupp.size() && vecttSupp[l].Area() < vecttSupp[max].Area())
+    if (l < vecttSupp.size() && vecttSupp[l]->Area() < vecttSupp[max]->Area())
     {
         max = l;
     }
 
-    if (r < vecttSupp.size() && vecttSupp[r].Area() < vecttSupp[max].Area())
+    if (r < vecttSupp.size() && vecttSupp[r]->Area() < vecttSupp[max]->Area())
     {
         max = r;
     }
@@ -311,7 +313,7 @@ void MakeHeap(vector<Cells::Cell2D> vecttSupp, int i){
     }
 }
 
-void HeapSort(vector<Cells::Cell2D> vecttSupp){
+void HeapSort(vector<Cells::Cell2D*> vecttSupp){
 
     for (int i = vecttSupp.size() / 2 - 1; i >= 0; i--)
     {
