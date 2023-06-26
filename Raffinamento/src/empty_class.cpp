@@ -9,6 +9,7 @@ using namespace std;
 
 
 Cells::TriangularMesh mesh;
+bool Import();
 bool ImportCell0Ds();
 bool ImportCell1Ds();
 bool ImportCell2Ds();
@@ -20,6 +21,13 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 //IMPORTAZIONE
 
 
+bool Import()
+{
+    ImportCell0Ds();
+    ImportCell1Ds();
+    ImportCell2Ds();
+    return 0;
+}
 
 bool ImportCell0Ds()
 {
