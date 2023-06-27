@@ -113,10 +113,18 @@ TEST(TestSorting, TestHeapSort)
 // ----------------------------------------------------------------------------------
 
 
-TEST(TestEmpty, TestEmpty)
+TEST(TestRefinment, TestBisect&Propagation)
 {
-  Cells::Empty empty;
-  ASSERT_NO_THROW(empty.Show());
+  unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVert5 = 4;
+    unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
+    unsigned int idTriT1 = 0, idTriT2 = 1, idTriT1 = 2, idTriT2 = 3;
+    unsigned int markerVerT1 = 1, markerVerT2 = 1, markerVerT3 = 1, markerVerT4 = 1, markerVerT5 = 0;
+    unsigned int markerEdgT1 = 1, markerEdgT2 = 1, markerEdgT3 = 1, markerEdgT4 = 1, markerEdgT5 = 0, markerEdgT6 = 0, markerEdgT7 = 0, markerEdgT8 = 0;    
+    Vector2d CoordT1 = {1, 0};
+    Vector2d CoordT2 = {11, 2};
+    Vector2d CoordT3 = {10, 5};
+    Vector2d CoordT4 = {2, 7};
+    Vector2D CoordT5 = {3, 6};
 }
 
 
