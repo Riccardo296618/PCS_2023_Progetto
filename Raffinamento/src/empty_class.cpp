@@ -6,16 +6,19 @@
 
 
 using namespace std;
+using namespace Eigen;
 
+namespace Project
+{
 
-Cells::TriangularMesh mesh;
+Project::TriangularMesh mesh;
 bool Import();
-bool ImportCell0Ds();
-bool ImportCell1Ds();
-bool ImportCell2Ds();
-Cells::MatrAdiac MatriceAdiacenza;
+bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti);
+bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati);
+bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli);
+Project::MatrAdiac MatriceAdiacenza;
 
-void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cells::Cell2D Triangolo, unsigned int latoMax);
+void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
 
 
 //IMPORTAZIONE
@@ -23,15 +26,15 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 
 bool Import()
 {
-    ImportCell0Ds();
-    ImportCell1Ds();
-    ImportCell2Ds();
+    ImportCell0Ds(mesh.vectp);
+    ImportCell1Ds(mesh.vects);
+    ImportCell2Ds(mesh.vectt);
     return 0;
 }
 
 
 
-bool ImportCell0Ds()
+bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti)
 {
 
 ifstream file;
@@ -70,8 +73,8 @@ Vector2d coord;
 converter >>  id >> marker >> coord(0) >> coord(1);
 
 
-Cells::Cell0D point = Cells::Cell0D(id,marker,coord);
-mesh.vectp.push_back(point);
+Project::Cell0D point = Project::Cell0D(id,marker,coord);
+vettorePunti.push_back(point);
 
 //    if( marker != 0)
 //    {
@@ -86,7 +89,7 @@ mesh.vectp.push_back(point);
   return true;
 }
 
-bool ImportCell1Ds()
+bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati)
 {
 
   ifstream file;
@@ -118,11 +121,11 @@ bool ImportCell1Ds()
 
     unsigned int id;
     unsigned int marker;
-    Vector2i vertices;
+    vector<unsigned int> vertices;
 
-    converter >>  id >> marker >> vertices(0) >> vertices(1);
-    Cells::Cell1D segment = Cells::Cell1D(id,marker,vertices);
-    mesh.vects.push_back(segment);
+    converter >>  id >> marker >> vertices[0] >> vertices[1];
+    Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
+    vettoreLati.push_back(segment);
     mesh.LengthEdges.push_back(segment.LengthEdge());
 
 
@@ -135,7 +138,7 @@ bool ImportCell1Ds()
 
 
 
-bool ImportCell2Ds()
+bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli)
 {
 
   ifstream file;
@@ -176,8 +179,8 @@ bool ImportCell2Ds()
     for(unsigned int i = 0; i < 3; i++)
       converter >> edges[i];
 
-    Cells::Cell2D triangle = Cells::Cell2D(id,vertices,edges);
-    mesh.vectt.push_back(triangle);
+    Project::Cell2D triangle = Project::Cell2D(id,vertices,edges);
+    vettoreTriangoli.push_back(triangle);
 
   }
   file.close();
@@ -200,8 +203,7 @@ bool ImportCell2Ds()
 
 
 
-namespace Cells
-{
+
 
 
 // COSTRUTTORI
@@ -215,11 +217,11 @@ Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
 
 
 
-Cell1D::Cell1D(unsigned int id,unsigned int marker,Vector2i vertices)
+Cell1D::Cell1D(unsigned int id,unsigned int marker,vector<unsigned int> vertices)
     {
     unsigned int Id1d = id;
     unsigned int marker1D = marker;
-    Vector2i Vertices1d = vertices;
+    vector<unsigned int> Vertices1d = vertices;
     };
 
 Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
@@ -235,7 +237,7 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 // !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
 
 //metterei double anziché void
-double Cells::Cell1D::LengthEdge(){
+double Project::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.vectp[Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[Vertices1D[1]].Coord;
     //LengthEdges = (coordEnd-coordOrigin).norm();
@@ -245,7 +247,7 @@ double Cells::Cell1D::LengthEdge(){
 
 
 //PROBLEMA TOLLERANZA
-unsigned int Cells::Cell2D::maxedge(){
+unsigned int Project::Cell2D::maxedge(){
     unsigned int indmax = 0;
     double* max = &(mesh.LengthEdges[Edges[0]]);
     for (unsigned int i = 1; i<3; i++){
@@ -284,24 +286,24 @@ MatrAdiac::MatrAdiac() {
 
 
 
-
-void MakeHeap(vector<Cells::Cell2D*> vecttSupp, int i){
+template <typename T>
+void MakeHeap(vector<T> vecttSupp, int i){
 
     vecttSupp.clear();
     for (unsigned int k = 0; k < mesh.vectt.size(); k++){
-        vecttSupp.push_back(&mesh.vectt[k]);
+        vecttSupp.push_back(mesh.vectt[k]);
     }
 
     int max = i;
     unsigned int l = 2 * i + 1;
     unsigned int r = 2 * i + 2;
 
-    if (l < vecttSupp.size() && vecttSupp[l]->Area() < vecttSupp[max]->Area())
+    if (l < vecttSupp.size() && vecttSupp[l] < vecttSupp[max])
     {
         max = l;
     }
 
-    if (r < vecttSupp.size() && vecttSupp[r]->Area() < vecttSupp[max]->Area())
+    if (r < vecttSupp.size() && vecttSupp[r] < vecttSupp[max])
     {
         max = r;
     }
@@ -313,7 +315,8 @@ void MakeHeap(vector<Cells::Cell2D*> vecttSupp, int i){
     }
 }
 
-void HeapSort(vector<Cells::Cell2D*> vecttSupp){
+template <typename T>
+void HeapSort(vector<T> vecttSupp){
 
     for (int i = vecttSupp.size() / 2 - 1; i >= 0; i--)
     {
@@ -330,7 +333,7 @@ void HeapSort(vector<Cells::Cell2D*> vecttSupp){
 
 
 
-void Bisect(Cells::Cell2D triangleToBisect){
+void Bisect(Project::Cell2D triangleToBisect){
 
     unsigned int longest = triangleToBisect.maxedge();
 
@@ -365,7 +368,7 @@ void Bisect(Cells::Cell2D triangleToBisect){
                                                                       // essere ulteriori configurazioni
     }
     unsigned int newIndexpoint = mesh.vectp.size();
-    Cells::Cell0D newVertex = Cell0D(newIndexpoint, markerP, midCoord);
+    Project::Cell0D newVertex = Cell0D(newIndexpoint, markerP, midCoord);
     mesh.vectp.push_back(newVertex);
 
     unsigned int opposite = NULL;
@@ -378,7 +381,7 @@ void Bisect(Cells::Cell2D triangleToBisect){
             }
     }
 
-    Vector2i MedianaVert = {opposite, newVertex};
+    vector<unsigned int> MedianaVert = {opposite, newVertex.Id0D};
 
     unsigned int idNewEdge = mesh.vects.size();
 
@@ -390,7 +393,7 @@ void Bisect(Cells::Cell2D triangleToBisect){
     Cell1D Mediana = Cell1D(idNewEdge, markerMediana, MedianaVert);
     mesh.vects.push_back(Mediana);
 
-    Vector2i NewSegVert = {newVertex.Id0D, mesh.vects[longest].Vertices1D[1]};
+    vector<unsigned int> NewSegVert = {newVertex.Id0D, mesh.vects[longest].Vertices1D[1]};
 
 
 
@@ -492,7 +495,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
                 }
         }
         //creo ultimo lato
-        Cell1D Unione = Cell1D(mesh.vectp.size(), 0, {mesh.vects[idLatoTagliatoNuovo].Vertices1D[0], newopposite});
+        Cell1D Unione = Cell1D(mesh.vects.size(), 0, {mesh.vects[idLatoTagliatoNuovo].Vertices1D[0], newopposite});
         mesh.vects.push_back(Unione);
 
         // creo Ultimo triangolo
@@ -512,7 +515,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
             }
         }
 
-        Cell2D UltimoTriangolo = Cell2D(mesh.vects.size(), vertUltimoTri, latiUltimoTri);
+        Cell2D UltimoTriangolo = Cell2D(mesh.vectt.size(), vertUltimoTri, latiUltimoTri);
         mesh.vectt.push_back(UltimoTriangolo);
 
         // aggiorno vertici
@@ -523,6 +526,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
             }
         }
 
+        // aggiorno lati
         for (unsigned int i=0; i < 3; i++) {
             if ((mesh.vects[Triangolo.Edges[i]].Vertices1D[0] == newopposite && mesh.vects[Triangolo.Edges[i]].Vertices1D[1] == mesh.vects[idLatoTagliatoNuovo].Vertices1D[1]) || (mesh.vects[Triangolo.Edges[i]].Vertices1D[1] == newopposite && mesh.vects[Triangolo.Edges[i]].Vertices1D[0] == mesh.vects[idLatoTagliatoNuovo].Vertices1D[1])) {
                 Triangolo.Edges[i] = Unione.Id1D;
@@ -607,7 +611,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         }
 
         unsigned int newIndexpointPropa = mesh.vectp.size();
-        Cells::Cell0D newVertexPropa = Cell0D(newIndexpointPropa, markerPPropa, midCoordPropa);
+        Project::Cell0D newVertexPropa = Cell0D(newIndexpointPropa, markerPPropa, midCoordPropa);
         mesh.vectp.push_back(newVertexPropa);
 
         unsigned int oppositePropa = NULL;
@@ -620,7 +624,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
                 }
         }
 
-        Vector2i MedianaVertPropa = {oppositePropa, newVertexPropa};
+        vector<unsigned int> MedianaVertPropa = {oppositePropa, newVertexPropa.Id0D};
 
         unsigned int idNewEdgePropa = mesh.vects.size();
 
@@ -629,7 +633,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         Cell1D MedianaPropa = Cell1D(idNewEdgePropa, markerMedianaPropa, MedianaVertPropa);
         mesh.vects.push_back(MedianaPropa);
 
-        Vector2i NewSegVertPropa = {newVertexPropa.Id0D, mesh.vects[latoMax].Vertices1D[1]};
+        vector<unsigned int> NewSegVertPropa = {newVertexPropa.Id0D, mesh.vects[latoMax].Vertices1D[1]};
 
 
         Cell1D newSegmentPropa = Cell1D(idNewEdgePropa + 1, mesh.vects[latoMax].marker1D, NewSegVertPropa);
@@ -732,7 +736,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         array<unsigned int, 3> vertTriResiduoPropa = Penultimo.Vertices2D;
 
 
-        Cell1D Unione = Cell1D(mesh.vects.size(), 0, {mesh.vects[idLatoTagliatoVecchio].Vertices1D[1], newVertexPropa});
+        Cell1D Unione = Cell1D(mesh.vects.size(), 0, {mesh.vects[idLatoTagliatoVecchio].Vertices1D[1], newVertexPropa.Id0D});
         mesh.vects.push_back(Unione);
 
         if (mesh.vects[latoMax].Vertices1D[0] == mesh.vects[idLatoTagliatoVecchio].Vertices1D[0]) {
