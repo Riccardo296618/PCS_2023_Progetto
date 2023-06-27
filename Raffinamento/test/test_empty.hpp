@@ -137,6 +137,9 @@ TEST(TestRefinment, TestBisect&Propagation)
     array<unsigned int, 3> edgTri1 = {vectsT[edgT1.id1D], vectsT[edgT5.id1D], vectsT[edgT6.id1D]}, edgTri2 = {vectsT[edgT2.id1D], vectsT[edgT6.id1D], vectsT[edgT7.id1D]}, edgTri3 = {vectsT[edgT3.id1D], vectsT[edgT7.id1D], vectsT[edgT8.id1D]}, edgTri4 = {vectsT[edgT4.id1D], vectsT[edgT8.id1D], vectsT[edgT5.id1D]};
     Cell2D triT1 = Cell2D(idTriT1, verTri1, edgTri1), triT2 = Cell2D(idTriT2, verTri2, edgTri2), triT3 = Cell2D(idTriT3, verTri3, edgTri3), triT4 = Cell2D(idTriT4, verTri4, edgTri4);
     vector<Project::Cell2D> vecttT = {TriT1, TriT2, TriT3, TriT4};
+
+    vector<Project::Cell2D> vecttSuppT{TriT1, TriT2, TriT3, TriT4};
+    Bisect(vecttT[0], vecttSuppT, vecttT, vectsT, vectpT);
 }
 
 
