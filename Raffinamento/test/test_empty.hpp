@@ -124,7 +124,7 @@ TEST(TestRefinment, TestBisect&Propagation)
     Vector2d CoordT2 = {11, 2};
     Vector2d CoordT3 = {10, 5};
     Vector2d CoordT4 = {2, 7};
-    Vector2D CoordT5 = {3, 6};
+    Vector2D CoordT5 = {3, 6};  // {5, 4}
 
     Cell0D vertT1 = Cell0D(idVerT1, markerVertT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVertT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVertT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVertT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVertT5, CoordT5);
     vector<Project::Cell0D> vectpT = {verT1, verT2, verT3, verT4, verT5};
