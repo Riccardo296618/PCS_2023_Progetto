@@ -16,7 +16,7 @@ bool Import();
 bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti);
 bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati);
 bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli);
-Project::MatrAdiac MatriceAdiacenza;
+Project::MatrAdiac MatriceAdiacenza = MatrAdiac(mesh.vectt, mesh.vects);
 
 void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
 
@@ -260,6 +260,14 @@ unsigned int Project::Cell2D::maxedge(){
 
 }
 
+double Project::Cell2D::Area(){
+             //Formula dell'area di Gauss
+             double A_12 = (mesh.vectp[this->Vertices2D[0]].Coord[0]*mesh.vectp[this->Vertices2D[1]].Coord[1]) - (mesh.vectp[this->Vertices2D[0]].Coord[1]*mesh.vectp[this->Vertices2D[1]].Coord[0]);
+             double A_23 = (mesh.vectp[this->Vertices2D[1]].Coord[0]*mesh.vectp[this->Vertices2D[2]].Coord[1]) - (mesh.vectp[this->Vertices2D[1]].Coord[1]*mesh.vectp[this->Vertices2D[2]].Coord[0]);
+             double A_31 = (mesh.vectp[this->Vertices2D[2]].Coord[0]*mesh.vectp[this->Vertices2D[0]].Coord[1]) - (mesh.vectp[this->Vertices2D[2]].Coord[1]*mesh.vectp[this->Vertices2D[0]].Coord[0]);
+             return abs((A_12+A_23+A_31)/2);
+  }
+
 
 
 //----------------------------------------------------------------------
@@ -272,11 +280,11 @@ unsigned int Project::Cell2D::maxedge(){
 // TAGLIO LATO LUNGO
 
 
-MatrAdiac::MatrAdiac() {
-    vector<vector<unsigned int>> MatrAdiac(mesh.numbercell1D);
-    for (unsigned int i = 0; i < mesh.numbercell2D; i++) {
+MatrAdiac::MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects) {
+    vector<vector<unsigned int>> MatrAdiac(vects.size());
+    for (unsigned int i = 0; i < vectt.size(); i++) {
         for (unsigned int j = 0; j < 3; j++) {
-            MatrAdiac[mesh.vectt[i].Edges[j]].push_back(mesh.vectt[i].Id2D);
+            MatrAdiac[vectt[i].Edges[j]].push_back(vectt[i].Id2D);
         }
     }
     Matr = MatrAdiac;
@@ -287,12 +295,9 @@ MatrAdiac::MatrAdiac() {
 
 
 template <typename T>
-void MakeHeap(vector<T> vecttSupp, int i){
+void MakeHeap(vector<T>& vecttSupp, int i){
 
-    vecttSupp.clear();
-    for (unsigned int k = 0; k < mesh.vectt.size(); k++){
-        vecttSupp.push_back(mesh.vectt[k]);
-    }
+
 
     int max = i;
     unsigned int l = 2 * i + 1;
@@ -316,7 +321,12 @@ void MakeHeap(vector<T> vecttSupp, int i){
 }
 
 template <typename T>
-void HeapSort(vector<T> vecttSupp){
+void HeapSort(vector<T>& vecttSupp, vector<T>& vectt){
+
+    vecttSupp.clear();
+    for (unsigned int k = 0; k < vectt.size(); k++){
+        vecttSupp.push_back(vectt[k]);
+    }
 
     for (int i = vecttSupp.size() / 2 - 1; i >= 0; i--)
     {
@@ -328,6 +338,7 @@ void HeapSort(vector<T> vecttSupp){
         MakeHeap(vecttSupp, 0);
     }
 }
+
 
 
 
@@ -473,8 +484,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     }
 
 
-}
- // fine Bisect
+} // fine Bisect
 
 
 
