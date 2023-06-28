@@ -60,11 +60,11 @@ TEST(TestImport, TestCell0D)
 
     Vector2d coord3T = {0.0000000000000000e+00, 0.655};
 
-    if(ImportCell0Ds(vectpT))
+    if(ImportCell0Ds(vectpT)){
         EXPECT_EQ(vectpT[0].marker0D, 1);
         EXPECT_EQ(vectpT[2].Id0D, 2);
         EXPECT_EQ(vectpT[3].Coord, coord3T);
-
+    }
 
 }
 
@@ -74,11 +74,12 @@ TEST(TestImport, TestCell1D)
 
     vector<Project::Cell1D> vectsT;
 
-    if(ImportCell1Ds(vectsT))
+    if(ImportCell1Ds(vectsT)){
         EXPECT_EQ(vectsT[0].marker1D, 0);
         EXPECT_EQ(vectsT[2].Id1D, 2);
         EXPECT_EQ(vectsT[3].Vertices1D[0], 23);
         EXPECT_EQ(vectsT[7].Vertices1D[1], 50);
+    }
 
 }
 
@@ -88,7 +89,7 @@ TEST(TestImport, TestCell2D)
 
     vector<Project::Cell2D> vecttT;
 
-    if(ImportCell2Ds(vecttT))
+    if(ImportCell2Ds(vecttT)){
         EXPECT_EQ(vecttT[0].Id2D, 41);
         EXPECT_EQ(vecttT[1].Vertices2D[0], 23);
         EXPECT_EQ(vecttT[2].Vertices2D[1], 51);
@@ -96,6 +97,7 @@ TEST(TestImport, TestCell2D)
         EXPECT_EQ(vecttT[4].Edges[0], 6);
         EXPECT_EQ(vecttT[5].Edges[1], 9);
         EXPECT_EQ(vecttT[6].Edges[2], 12);
+    }
 
 }
 
@@ -103,8 +105,9 @@ TEST(TestImport, TestCell2D)
 
 TEST(TestSorting, TestHeapSort)
 {
-    vector<unsigned int> vecttSuppT = {31, 45, 23, 3, 99, 7, 10, 25, 66, 69, 77, 88};
-    HeapSort(vecttSuppT);
+    vector<unsigned int> vecttT = {31, 45, 23, 3, 99, 7, 10, 25, 66, 69, 77, 88};
+    vector<unsigned int> vecttSuppT;
+    HeapSort(vecttSuppT, vecttT);
     vector<unsigned int> OrderedT = {99, 88, 77, 69, 66, 45, 31, 25, 23, 10, 7, 3};
     EXPECT_EQ(vecttSuppT, OrderedT);
 }
@@ -134,7 +137,7 @@ TEST(TestRefinment, TestBisectEPropagation)
     vector<Project::Cell1D> vectsT = {edgT1, edgT2, edgT3, edgT4, edgT5, edgT6, edgT7, edgT8};
 
     array<unsigned int, 3> verTri1 = {vertT1.Id0D, vertT2.Id0D, vertT5.Id0D}, verTri2 = {vertT2.Id0D, vertT3.Id0D, vertT5.Id0D}, verTri3 = {vertT3.Id0D, vertT4.Id0D, vertT5.Id0D}, verTri4 = {vertT4.Id0D, vertT1.Id0D, vertT5.Id0D};
-    array<unsigned int, 3> edgTri1 = {edgT1.Id1D, edgT5.Id1D, edgT6.Id1D}, edgTri2 = {edgT2.Id1D, edgT6.Id1D, edgT7.Id1D}, edgTri3 = {edgT3.Id1D, edgT7.Id1D, edgT8.Id1D}, edgTri4 = {edgT4.Id1D, edgT8.Id1D, edgT5.Id1D};
+    array<unsigned int, 3> edgTri1 = {edgT1.Id1D, edgT6.Id1D, edgT5.Id1D}, edgTri2 = {edgT2.Id1D, edgT7.Id1D, edgT6.Id1D}, edgTri3 = {edgT3.Id1D, edgT8.Id1D, edgT7.Id1D}, edgTri4 = {edgT4.Id1D, edgT5.Id1D, edgT8▓.Id1D};
     Cell2D triT1 = Cell2D(idTriT1, verTri1, edgTri1), triT2 = Cell2D(idTriT2, verTri2, edgTri2), triT3 = Cell2D(idTriT3, verTri3, edgTri3), triT4 = Cell2D(idTriT4, verTri4, edgTri4);
     vector<Project::Cell2D> vecttT = {triT1, triT2, triT3, triT4};
 
@@ -144,11 +147,11 @@ TEST(TestRefinment, TestBisectEPropagation)
 
 
 
-TEST(TestEmpty, TestEmpty)
-{
-  Cells::Empty empty;
-  ASSERT_NO_THROW(empty.Show());
-}
+//TEST(TestEmpty, TestEmpty)
+//{
+//  Project::Empty empty;
+//  ASSERT_NO_THROW(empty.Show());
+//}
 
 
 
