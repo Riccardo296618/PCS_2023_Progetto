@@ -76,7 +76,7 @@ namespace Project {
     class MatrAdiac{
     public:
         vector<vector<unsigned int>> Matr;
-        MatrAdiac();
+        MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects);
     };
 
     bool Import();
@@ -85,11 +85,11 @@ namespace Project {
     bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli);
 
     template <typename T>
-    void MakeHeap(vector<T> vecttSupp, int i);
+    void MakeHeap(vector<T>& vecttSupp, int i);
     template <typename T>
-    void HeapSort(vector<T> vecttSupp);
+    void HeapSort(vector<T>& vecttSupp, vector<T>& vectt);
 
-    void Bisect(Project::Cell2D triangleToBisect);
+    void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
     void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax);
 
 
