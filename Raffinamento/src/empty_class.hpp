@@ -90,7 +90,7 @@ namespace Project {
     void HeapSort(vector<T>& vecttSupp, vector<T>& vectt);
 
     void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
-    void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax);
+    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
 
 
 
@@ -104,7 +104,7 @@ namespace Project {
     static constexpr double tol2D = max_tol(tol1D * tol1D, numeric_limits<double>::epsilon());
 
 
-    inline bool operator<( Cell2D t1,  Cell2D t2)
+    inline bool operator<( Cell2D& t1,  Cell2D& t2)
     {
       return t1.Area() < t2.Area() + tol2D * max(t1.Area(), t2.Area());
     }
@@ -113,6 +113,9 @@ namespace Project {
     {
       return !(t1 < t2);
     }
+
+
+
  }
 
 
