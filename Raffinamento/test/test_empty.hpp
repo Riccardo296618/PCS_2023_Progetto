@@ -73,7 +73,7 @@ TEST(TestImport, TestCell1D)
 {
 
     vector<Project::Cell1D> vectsT;
-    
+
     if(ImportCell1Ds(vectsT))
         EXPECT_EQ(vectsT[0].marker1D, 0);
         EXPECT_EQ(vectsT[2].Id1D, 2);
@@ -87,7 +87,7 @@ TEST(TestImport, TestCell2D)
 {
 
     vector<Project::Cell2D> vecttT;
-    
+
     if(ImportCell2Ds(vecttT))
         EXPECT_EQ(vecttT[0].Id2D, 41);
         EXPECT_EQ(vecttT[1].Vertices2D[0], 23);
@@ -105,7 +105,7 @@ TEST(TestSorting, TestHeapSort)
 {
     vector<unsigned int> vecttSuppT = {31, 45, 23, 3, 99, 7, 10, 25, 66, 69, 77, 88};
     HeapSort(vecttSuppT);
-    vector<int> OrderedT = {99, 88, 77, 69, 66, 45, 31, 25, 23, 10, 7, 3};
+    vector<unsigned int> OrderedT = {99, 88, 77, 69, 66, 45, 31, 25, 23, 10, 7, 3};
     EXPECT_EQ(vecttSuppT, OrderedT);
 }
 
@@ -113,32 +113,32 @@ TEST(TestSorting, TestHeapSort)
 // ----------------------------------------------------------------------------------
 
 
-TEST(TestRefinment, TestBisect&Propagation)
+TEST(TestRefinment, TestBisectEPropagation)
 {
-    unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVert5 = 4;
+    unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
     unsigned int idTriT1 = 0, idTriT2 = 1, idTriT3 = 2, idTriT4 = 3;
     unsigned int markerVerT1 = 1, markerVerT2 = 1, markerVerT3 = 1, markerVerT4 = 1, markerVerT5 = 0;
-    unsigned int markerEdgT1 = 1, markerEdgT2 = 1, markerEdgT3 = 1, markerEdgT4 = 1, markerEdgT5 = 0, markerEdgT6 = 0, markerEdgT7 = 0, markerEdgT8 = 0;    
+    unsigned int markerEdgT1 = 1, markerEdgT2 = 1, markerEdgT3 = 1, markerEdgT4 = 1, markerEdgT5 = 0, markerEdgT6 = 0, markerEdgT7 = 0, markerEdgT8 = 0;
     Vector2d CoordT1 = {1, 0};
     Vector2d CoordT2 = {11, 2};
     Vector2d CoordT3 = {10, 5};
     Vector2d CoordT4 = {2, 7};
-    Vector2D CoordT5 = {3, 6};  // {5, 4}
+    Vector2d CoordT5 = {3, 6};  // {5, 4}
 
-    Cell0D vertT1 = Cell0D(idVerT1, markerVertT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVertT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVertT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVertT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVertT5, CoordT5);
-    vector<Project::Cell0D> vectpT = {verT1, verT2, verT3, verT4, verT5};
+    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
+    vector<Project::Cell0D> vectpT = {vertT1, vertT2, vertT3, vertT4, vertT5};
 
-    vector<unsigned int> verEdg1 = {vectpT[verT1.id0D], vectpT[verT2.id0D]}, verEdg2 = {vectpT[verT2.id0D], vectpT[verT3.id0D]}, verEdg3 = {vectpT[verT3.id0D], vectpT[verT4.id0D]}, verEdg4 = {vectpT[verT4.id0D], vectpT[verT1.id0D]}, verEdg5 = {vectpT[verT1.id0D], vectpT[verT5.id0D]}, verEdg6 = {vectpT[verT2.id0D], vectpT[verT5.id0D]}, verEdg7 = {vectpT[verT3.id0D], vectpT[verT5.id0D]}, verEdg8 = {vectpT[verT4.id0D], vectpT[verT5.id0D]};
+    vector<unsigned int> verEdg1 = {vertT1.Id0D, vertT2.Id0D}, verEdg2 = {vertT2.Id0D, vertT3.Id0D}, verEdg3 = {vertT3.Id0D, vertT4.Id0D}, verEdg4 = {vertT4.Id0D, vertT1.Id0D}, verEdg5 = {vertT1.Id0D, vertT5.Id0D}, verEdg6 = {vertT2.Id0D, vertT5.Id0D}, verEdg7 = {vertT3.Id0D, vertT5.Id0D}, verEdg8 = {vertT4.Id0D, vertT5.Id0D};
     Cell1D edgT1 = Cell1D(idEdgT1, markerEdgT1, verEdg1), edgT2 = Cell1D(idEdgT2, markerEdgT2, verEdg2), edgT3 = Cell1D(idEdgT3, markerEdgT3, verEdg3), edgT4 = Cell1D(idEdgT4, markerEdgT4, verEdg4), edgT5 = Cell1D(idEdgT5, markerEdgT5, verEdg5), edgT6 = Cell1D(idEdgT6, markerEdgT6, verEdg6), edgT7 = Cell1D(idEdgT7, markerEdgT7, verEdg7), edgT8 = Cell1D(idEdgT8, markerEdgT8, verEdg8);
     vector<Project::Cell1D> vectsT = {edgT1, edgT2, edgT3, edgT4, edgT5, edgT6, edgT7, edgT8};
 
-    array<unsigned int, 3> verTri1 = {vectpT[verT1.id0D], vectpT[verT2.id0D], vectpT[verT5.id0D]}, verTri2 = {vectpT[verT2.id0D], vectpT[verT3.id0D], vectpT[verT5.id0D]}, verTri3 = {vectpT[verT3.id0D], vectpT[verT4.id0D], vectpT[verT5.id0D]}, verTri4 = {vectpT[verT4.id0D], vectpT[verT1.id0D], vectpT[verT5.id0D]};
-    array<unsigned int, 3> edgTri1 = {vectsT[edgT1.id1D], vectsT[edgT5.id1D], vectsT[edgT6.id1D]}, edgTri2 = {vectsT[edgT2.id1D], vectsT[edgT6.id1D], vectsT[edgT7.id1D]}, edgTri3 = {vectsT[edgT3.id1D], vectsT[edgT7.id1D], vectsT[edgT8.id1D]}, edgTri4 = {vectsT[edgT4.id1D], vectsT[edgT8.id1D], vectsT[edgT5.id1D]};
+    array<unsigned int, 3> verTri1 = {vertT1.Id0D, vertT2.Id0D, vertT5.Id0D}, verTri2 = {vertT2.Id0D, vertT3.Id0D, vertT5.Id0D}, verTri3 = {vertT3.Id0D, vertT4.Id0D, vertT5.Id0D}, verTri4 = {vertT4.Id0D, vertT1.Id0D, vertT5.Id0D};
+    array<unsigned int, 3> edgTri1 = {edgT1.Id1D, edgT5.Id1D, edgT6.Id1D}, edgTri2 = {edgT2.Id1D, edgT6.Id1D, edgT7.Id1D}, edgTri3 = {edgT3.Id1D, edgT7.Id1D, edgT8.Id1D}, edgTri4 = {edgT4.Id1D, edgT8.Id1D, edgT5.Id1D};
     Cell2D triT1 = Cell2D(idTriT1, verTri1, edgTri1), triT2 = Cell2D(idTriT2, verTri2, edgTri2), triT3 = Cell2D(idTriT3, verTri3, edgTri3), triT4 = Cell2D(idTriT4, verTri4, edgTri4);
-    vector<Project::Cell2D> vecttT = {TriT1, TriT2, TriT3, TriT4};
+    vector<Project::Cell2D> vecttT = {triT1, triT2, triT3, triT4};
 
-    vector<Project::Cell2D> vecttSuppT{TriT1, TriT2, TriT3, TriT4};
+    vector<Project::Cell2D> vecttSuppT{triT1, triT2, triT3, triT4};
     Bisect(vecttT[0], vecttSuppT, vecttT, vectsT, vectpT);
 }
 
