@@ -12,7 +12,9 @@ int main()
 //  int n = 5; // poi da cambiare: probabilmente è la size di vectsupp in heapsort
     vector<Project::Cell2D> vectSupp;
     Project::TriangularMesh mesh;
-    Project::Import();
+    Project::ImportCell0Ds(mesh.vectp);
+    Project::ImportCell1Ds(mesh.vects);
+    Project::ImportCell2Ds(mesh.vectt);
     Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
     for (int iter = 0; iter<20; iter++) {
