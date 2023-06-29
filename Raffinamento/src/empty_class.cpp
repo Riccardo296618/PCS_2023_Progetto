@@ -26,13 +26,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 //IMPORTAZIONE
 
 
-bool Import()
-{
-    ImportCell0Ds(mesh.vectp);
-    ImportCell1Ds(mesh.vects);
-    ImportCell2Ds(mesh.vectt);
-    return 0;
-}
+
 
 
 
@@ -243,8 +237,8 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 //metterei double anziché void
 
 double Project::Cell1D::LengthEdge(){
-    Vector2d coordOrigin = mesh.vectp[Vertices1D[0]].Coord;
-    Vector2d coordEnd= mesh.vectp[Vertices1D[1]].Coord;
+    Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
+    Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
     //LengthEdges = (coordEnd-coordOrigin).norm();
     double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
     return len;
@@ -791,6 +785,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
 
 } // fine namespace Cells
+
+
+//-----------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------
