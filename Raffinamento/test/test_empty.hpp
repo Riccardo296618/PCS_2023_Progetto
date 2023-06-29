@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "empty_class.hpp"
+#include "sorting.hpp"
 
 using namespace testing;
 using namespace Project;
@@ -196,7 +197,7 @@ TEST(TestSorting, TestHeapSort)
 {
     vector<unsigned int> vecttT = {31, 45, 23, 3, 99, 7, 10, 25, 66, 69, 77, 88};
     vector<unsigned int> vecttSuppT = {};
-    HeapSort(vecttSuppT, vecttT);
+    Sorting::HeapSort(vecttSuppT, vecttT);
     vector<unsigned int> OrderedT = {99, 88, 77, 69, 66, 45, 31, 25, 23, 10, 7, 3};
     EXPECT_EQ(vecttSuppT, OrderedT);
 }
