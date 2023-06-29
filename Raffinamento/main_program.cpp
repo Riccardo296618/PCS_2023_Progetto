@@ -1,5 +1,10 @@
-#include "empty_class.cpp"
+#include "empty_class.hpp"
+#include "sorting.hpp"
 
+using namespace std;
+using namespace Eigen;
+using namespace Sorting;
+using namespace Project;
 
 
 int main()
@@ -10,10 +15,8 @@ int main()
     Project::Import();
     Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
-
-
     for (int iter = 0; iter<20; iter++) {
-        HeapSort(vectSupp, Project::mesh.vectt);
+        HeapSort(vectSupp, mesh.vectt);
         for (int i = 0; i < 20; i++) {
             Project::Cell2D& trisupp = vectSupp[i];
             Bisect(trisupp, mesh.vectp, mesh.vects, mesh.vectt, MatriceAdiacenza.Matr);
