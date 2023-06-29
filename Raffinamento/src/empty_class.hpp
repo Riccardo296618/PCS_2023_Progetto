@@ -80,14 +80,9 @@ namespace Project {
     };
 
     bool Import();
-    bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti);
-    bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati);
-    bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli);
-
-    template <typename T>
-    void MakeHeap(vector<T>& vecttSupp, int i);
-    template <typename T>
-    void HeapSort(vector<T>& vecttSupp, vector<T>& vectt);
+    bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
+    bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati);
+    bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli);
 
     void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
     void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
@@ -117,6 +112,10 @@ namespace Project {
 
 
  }
+
+
+#endif // __EMPTY_H
+
 
 
 #endif // __EMPTY_H
