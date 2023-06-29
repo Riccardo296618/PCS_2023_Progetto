@@ -13,11 +13,7 @@ using namespace Sorting;
 namespace Project
 {
 
-Project::TriangularMesh mesh;
-bool Import();
-bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti);
-bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati);
-bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli);
+Project::TriangularMesh mesh = Project::TriangularMesh();
 Project::MatrAdiac MatriceAdiacenza = MatrAdiac(mesh.vectt, mesh.vects);
 
 void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
@@ -249,12 +245,12 @@ unsigned int Project::Cell2D::maxedge(){
     unsigned int indmax = 0;
     double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(mesh.vects[this->Edges[i]].LengthEdge()  > max + tol1D){  // check
+        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
             max = mesh.vects[this->Edges[i]].LengthEdge();
-            indmax = Edges[i];
+            indmax = i;
         }
     }
-    return indmax;
+    return this->Edges[indmax];
 
 }
 
@@ -788,10 +784,3 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
 
 //-----------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------
-
