@@ -58,18 +58,20 @@ namespace Project {
     class TriangularMesh{
     public:
         unsigned int numbercell0D;
-        vector<Project::Cell0D> vectp = {};
+        vector<Project::Cell0D> vectp;
 
 
 
         unsigned int numbercell1D;
-        vector<Project::Cell1D> vects = {};
-        vector<double> LengthEdges = {};
+        vector<Project::Cell1D> vects;
+        vector<double> LengthEdges;
 
 
         unsigned int numbercell2D;
-        std::vector<vector<unsigned int>> LenghtMax = {};
-        vector<Project::Cell2D> vectt = {};
+        std::vector<vector<unsigned int>> LenghtMax;
+        vector<Project::Cell2D> vectt;
+
+        TriangularMesh() = default;
 
     };
 
@@ -79,7 +81,6 @@ namespace Project {
         MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects);
     };
 
-    bool Import();
     bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
     bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati);
     bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli);
@@ -112,10 +113,6 @@ namespace Project {
 
 
  }
-
-
-#endif // __EMPTY_H
-
 
 
 #endif // __EMPTY_H
