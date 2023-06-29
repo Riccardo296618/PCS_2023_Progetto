@@ -30,7 +30,7 @@ namespace Project {
             unsigned int marker0D;
             unsigned int Id0D;
             Vector2d Coord;
-        Cell0D(unsigned int id, unsigned int marker, Vector2d coord);
+        Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord);
         };
 
 
@@ -40,7 +40,7 @@ namespace Project {
             unsigned int marker1D;
             unsigned int Id1D;
             vector<unsigned int> Vertices1D;
-            Cell1D(unsigned int id, unsigned int marker, vector<unsigned int> vertices);
+            Cell1D(unsigned int& id, unsigned int& marker, vector<unsigned int>& vertices);
             double LengthEdge();
  };
 
@@ -50,7 +50,7 @@ namespace Project {
             unsigned int Id2D;
             array<unsigned int, 3> Vertices2D;
             array<unsigned int, 3> Edges;
-            Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges);
+            Cell2D(unsigned int& id, array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges);
             unsigned int maxedge();
             double Area();
         };
@@ -78,7 +78,7 @@ namespace Project {
     class MatrAdiac{
     public:
         vector<vector<unsigned int>> Matr;
-        MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects);
+        MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
     };
 
     bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
