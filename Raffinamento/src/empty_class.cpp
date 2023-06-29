@@ -1,4 +1,5 @@
 #include "empty_class.hpp"
+#include "sorting.hpp"
 #include <iostream>
 #include "Eigen/Eigen"
 #include <fstream>
@@ -7,6 +8,7 @@
 
 using namespace std;
 using namespace Eigen;
+using namespace Sorting;
 
 namespace Project
 {
@@ -34,7 +36,7 @@ bool Import()
 
 
 
-bool ImportCell0Ds(vector<Project::Cell0D> vettorePunti)
+bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti)
 {
 
 ifstream file;
@@ -89,7 +91,9 @@ vettorePunti.push_back(point);
   return true;
 }
 
-bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati)
+
+
+bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati)
 {
 
   ifstream file;
@@ -138,7 +142,7 @@ bool ImportCell1Ds(vector<Project::Cell1D> vettoreLati)
 
 
 
-bool ImportCell2Ds(vector<Project::Cell2D> vettoreTriangoli)
+bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli)
 {
 
   ifstream file;
@@ -237,22 +241,22 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 // !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
 
 //metterei double anziché void
+
 double Project::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.vectp[Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[Vertices1D[1]].Coord;
     //LengthEdges = (coordEnd-coordOrigin).norm();
-    double len = sqrt(pow(coordOrigin[0]-coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
+    double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
     return len;
     }
-
 
 //PROBLEMA TOLLERANZA
 unsigned int Project::Cell2D::maxedge(){
     unsigned int indmax = 0;
-    double max = mesh.LengthEdges[Edges[0]];
+    double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(mesh.LengthEdges[Edges[i]]  > max + tol1D){  // check
-            max = mesh.LengthEdges[Edges[i]];
+        if(mesh.vects[this->Edges[i]].LengthEdge()  > max + tol1D){  // check
+            max = mesh.vects[this->Edges[i]].LengthEdge();
             indmax = Edges[i];
         }
     }
@@ -294,50 +298,6 @@ MatrAdiac::MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vect
 
 
 
-template <typename T>
-void MakeHeap(vector<T>& vecttSupp, int i){
-
-
-
-    int max = i;
-    unsigned int l = 2 * i + 1;
-    unsigned int r = 2 * i + 2;
-
-    if (l < vecttSupp.size() && vecttSupp[l] < vecttSupp[max])
-    {
-        max = l;
-    }
-
-    if (r < vecttSupp.size() && vecttSupp[r] < vecttSupp[max])
-    {
-        max = r;
-    }
-
-    if (max != i)
-    {
-        swap(vecttSupp[i], vecttSupp[l]);
-        MakeHeap(vecttSupp, i);
-    }
-}
-
-template <typename T>
-void HeapSort(vector<T>& vecttSupp, vector<T>& vectt){
-
-    vecttSupp.clear();
-    for (unsigned int k = 0; k < vectt.size(); k++){
-        vecttSupp.push_back(vectt[k]);
-    }
-
-    for (int i = vecttSupp.size() / 2 - 1; i >= 0; i--)
-    {
-        MakeHeap(vecttSupp, i);
-    }
-    for (int i = vecttSupp.size() - 1; i >= 0; i--)
-    {
-        swap(vecttSupp[0], vecttSupp[i]);
-        MakeHeap(vecttSupp, 0);
-    }
-}
 
 
 
@@ -831,6 +791,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
 
 } // fine namespace Cells
+
+
+//-----------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------
