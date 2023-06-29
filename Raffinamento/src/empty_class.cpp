@@ -202,7 +202,7 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli)
 
 // COSTRUTTORI
 
-Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
+Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
     {
     unsigned int Id0D = id;
     unsigned int marker0D = marker;
@@ -211,14 +211,14 @@ Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
 
 
 
-Cell1D::Cell1D(unsigned int id,unsigned int marker,vector<unsigned int> vertices)
+Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& vertices)
     {
     unsigned int Id1d = id;
     unsigned int marker1D = marker;
     vector<unsigned int> Vertices1d = vertices;
     };
 
-Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
+Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges)
     {
     unsigned int Id2D = id;
     array<unsigned int, 3> Vertices2D = Vertices;
@@ -235,8 +235,8 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 double Project::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
-    //LengthEdges = (coordEnd-coordOrigin).norm();
-    double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
+    double len = (coordEnd-coordOrigin).norm();
+    //double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
     return len;
     }
 
@@ -274,8 +274,8 @@ double Project::Cell2D::Area(){
 // TAGLIO LATO LUNGO
 
 
-MatrAdiac::MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects) {
-    vector<vector<unsigned int>> MatrAdiac(vects.size());
+MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects) {
+    vector<vector<unsigned int>> MatrAdiac(vects.size(), vector<unsigned int>());
     for (unsigned int i = 0; i < vectt.size(); i++) {
         for (unsigned int j = 0; j < 3; j++) {
             MatrAdiac[vectt[i].Edges[j]].push_back(vectt[i].Id2D);
@@ -345,6 +345,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     vector<unsigned int> MedianaVert = {opposite, newVertex.Id0D};
 
     unsigned int idNewEdge = vects.size();
+    unsigned int idNewEdge2 = idNewEdge + 1;
 
     unsigned int markerMediana = 0; // NON PUO' ESSERE ALTRIMENTI
 
@@ -359,7 +360,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 
     //Creo segm pto medio -> end vecchia
-    Cell1D newSegment = Cell1D(idNewEdge + 1, vects[longest].marker1D, NewSegVert);
+    Cell1D newSegment = Cell1D(idNewEdge2, vects[longest].marker1D, NewSegVert);
     vects.push_back(newSegment);
 
 
@@ -456,8 +457,12 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 break;
                 }
         }
+
+        unsigned int marker0 = 0;
+        unsigned int size = vects.size();
+        vector<unsigned int> vettore = {vects[idLatoTagliatoNuovo].Vertices1D[0], newopposite};
         //creo ultimo lato
-        Cell1D Unione = Cell1D(vects.size(), 0, {vects[idLatoTagliatoNuovo].Vertices1D[0], newopposite});
+        Cell1D Unione = Cell1D(size, marker0, vettore);
         vects.push_back(Unione);
 
         // creo Ultimo triangolo
@@ -477,7 +482,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
-        Cell2D UltimoTriangolo = Cell2D(vectt.size(), vertUltimoTri, latiUltimoTri);
+        unsigned int sizeT = vectt.size();
+
+        Cell2D UltimoTriangolo = Cell2D(sizeT, vertUltimoTri, latiUltimoTri);
         vectt.push_back(UltimoTriangolo);
 
         // aggiorno vertici
@@ -598,7 +605,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         vector<unsigned int> NewSegVertPropa = {newVertexPropa.Id0D, vects[latoMax].Vertices1D[1]};
 
 
-        Cell1D newSegmentPropa = Cell1D(idNewEdgePropa + 1, vects[latoMax].marker1D, NewSegVertPropa);
+        unsigned int idNewEdgeTemp = idNewEdgePropa + 1;
+
+        Cell1D newSegmentPropa = Cell1D(idNewEdgeTemp, vects[latoMax].marker1D, NewSegVertPropa);
         vects.push_back(newSegmentPropa);
 
         // aggiorno end pto medio propa
@@ -667,7 +676,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
-        Cell2D Penultimo = Cell2D(vectt.size(), vertTriNuovoPropa, latiTriNuovoPropa);
+        unsigned int sizePenultimo = vectt.size();
+
+        Cell2D Penultimo = Cell2D(sizePenultimo, vertTriNuovoPropa, latiTriNuovoPropa);
         vectt.push_back(Penultimo);
 
         //aggiorno PARZIALMENTE matrice di adiac
@@ -698,7 +709,11 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         array<unsigned int, 3> vertTriResiduoPropa = Penultimo.Vertices2D;
 
 
-        Cell1D Unione = Cell1D(vects.size(), 0, {vects[idLatoTagliatoVecchio].Vertices1D[1], newVertexPropa.Id0D});
+        unsigned int sizeUnione = vects.size();
+        unsigned int markerUnione = 0;
+        vector<unsigned int> vettoreUnione = {vects[idLatoTagliatoVecchio].Vertices1D[1], newVertexPropa.Id0D};
+
+        Cell1D Unione = Cell1D(sizeUnione, markerUnione, vettoreUnione);
         vects.push_back(Unione);
 
         if (vects[latoMax].Vertices1D[0] == vects[idLatoTagliatoVecchio].Vertices1D[0]) {
@@ -723,7 +738,10 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
 
             }
-            Cell2D Residuo = Cell2D(vectt.size(), vertTriResiduoPropa, latiTriResiduoPropa);
+
+            unsigned int sizeResiduoT = vectt.size();
+
+            Cell2D Residuo = Cell2D(sizeResiduoT, vertTriResiduoPropa, latiTriResiduoPropa);
             vectt.push_back(Residuo);
 
             // aggiorno matrice adiacenza
@@ -757,7 +775,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
             }
 
-            Cell2D Residuo = Cell2D(vectt.size(), vertTriResiduoPropa, latiTriResiduoPropa);
+            unsigned int sizeResiduo = vectt.size();
+
+            Cell2D Residuo = Cell2D(sizeResiduo, vertTriResiduoPropa, latiTriResiduoPropa);
             vectt.push_back(Residuo);
 
             // aggiorno matrice adiacenza
