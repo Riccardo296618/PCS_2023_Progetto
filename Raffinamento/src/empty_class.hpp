@@ -30,7 +30,7 @@ namespace Project {
             unsigned int marker0D;
             unsigned int Id0D;
             Vector2d Coord;
-        Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord);
+            Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord);
         };
 
 
@@ -71,7 +71,7 @@ namespace Project {
         std::vector<vector<unsigned int>> LenghtMax;
         vector<Project::Cell2D> vectt;
 
-        TriangularMesh() = default;
+        TriangularMesh(unsigned int& numbercell0D1, vector<Project::Cell0D>& vectp1, unsigned int& numbercell1D1, vector<Project::Cell1D>& vects1, vector<double>& LengthEdges1, unsigned int& numbercell2D1, std::vector<vector<unsigned int>>& LenghtMax1, vector<Project::Cell2D>& vectt1);
 
     };
 
@@ -100,7 +100,7 @@ namespace Project {
     static constexpr double tol2D = max_tol(tol1D * tol1D, numeric_limits<double>::epsilon());
 
 
-    inline bool operator<( Cell2D& t1,  Cell2D& t2)
+    inline bool operator<(Cell2D& t1,  Cell2D& t2)
     {
       return t1.Area() < t2.Area() + tol2D * max(t1.Area(), t2.Area());
     }
