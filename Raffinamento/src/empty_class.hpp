@@ -22,7 +22,6 @@ using namespace Eigen;
 namespace Project {
 
 
-
     class Cell0D {
 
 
@@ -58,22 +57,26 @@ namespace Project {
     class TriangularMesh{
     public:
         unsigned int numbercell0D;
-        vector<Project::Cell0D> vectp;
+        vector<Project::Cell0D> vectp1;
 
 
 
         unsigned int numbercell1D;
-        vector<Project::Cell1D> vects;
+        vector<Project::Cell1D> vects1;
         vector<double> LengthEdges;
 
 
         unsigned int numbercell2D;
         std::vector<vector<unsigned int>> LenghtMax;
-        vector<Project::Cell2D> vectt;
+        vector<Project::Cell2D> vectt1;
 
         TriangularMesh(unsigned int& numbercell0D1, vector<Project::Cell0D>& vectp1, unsigned int& numbercell1D1, vector<Project::Cell1D>& vects1, vector<double>& LengthEdges1, unsigned int& numbercell2D1, std::vector<vector<unsigned int>>& LenghtMax1, vector<Project::Cell2D>& vectt1);
 
     };
+
+    extern vector<Project::Cell0D> vectp;
+    extern vector<Project::Cell1D> vects;
+    extern vector<Project::Cell2D> vectt;
 
     class MatrAdiac{
     public:
@@ -81,13 +84,18 @@ namespace Project {
         MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
     };
 
+
+
+
+
+
     bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
     bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati);
     bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli);
 
     void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
-    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
-
+    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); //, unsigned int& numberRecurs);
+    //void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs);
 
 
     // tolleranze
