@@ -1,30 +1,30 @@
-#include "empty_class.hpp"
-#include "sorting.hpp"
 #include <iostream>
 #include "Eigen/Eigen"
 #include <fstream>
 #include <algorithm>
+#include "empty_class.hpp"
+#include "sorting.hpp"
 
 
 using namespace std;
 using namespace Eigen;
 using namespace Sorting;
+using namespace Project;
 
-namespace Project
-{
+
 
 TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
 
     numbercell0D = numbercell0D12;
-    vectp = vectp12;
+    vectp1 = vectp12;
 
     numbercell1D = numbercell1D12;
-    vects = vects12;
+    vects1 = vects12;
     LengthEdges = LengthEdges12;
 
     numbercell2D = numbercell2D12;
     LenghtMax = LenghtMax12;
-    vectt = vectt12;
+    vectt1 = vectt12;
 };
 
 
@@ -46,7 +46,17 @@ Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& verti
     {
     Id1D = id;
     marker1D = marker;
-    Vertices1D = vertices;
+    //Vertices1D = vertices;
+
+    if (vertices.size() >= 2)
+        {
+            Vertices1D = vertices;
+        }
+        else
+        {
+            cerr << "Invalid number of vertices for Cell1D with id: " << id << endl;
+
+        }
     };
 
 Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges2D)
@@ -56,14 +66,52 @@ Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned
     Edges = Edges2D;
     };
 
+
+
+
 unsigned int numbercell0D123;
-vector<Project::Cell0D> vectp123;
+//vector<Project::Cell0D> vectp;
 unsigned int numbercell1D123;
-vector<Project::Cell1D> vects123;
+//vector<Project::Cell1D> vects;
 vector<double> LengthEdges123;
 unsigned int numbercell2D123;
 std::vector<vector<unsigned int>> LenghtMax123;
-vector<Project::Cell2D> vectt123;
+//vector<Project::Cell2D> vectt;
+
+
+
+
+
+
+double Project::Cell1D::LengthEdge(){
+    Vector2d coordOrigin = vectp[this->Vertices1D[0]].Coord;
+    Vector2d coordEnd= vectp[this->Vertices1D[1]].Coord;
+    //double len = (coordEnd-coordOrigin).norm();
+    double len = sqrt(pow(coordOrigin.x() - coordEnd.x(), 2)+pow(coordOrigin.y() - coordEnd.y(), 2));
+    return len;
+    }
+
+//PROBLEMA TOLLERANZA
+unsigned int Project::Cell2D::maxedge(){
+    unsigned int indmax = 0;
+    double max = vects[this->Edges[0]].LengthEdge();
+    for (unsigned int i = 1; i<3; i++){
+        if(vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
+            max = vects[this->Edges[i]].LengthEdge();
+            indmax = i;
+        }
+    }
+    return this->Edges[indmax];
+
+}
+
+double Project::Cell2D::Area(){
+             //Formula dell'area di Gauss
+             double A_12 = (vectp[this->Vertices2D[0]].Coord[0]*vectp[this->Vertices2D[1]].Coord[1]) - (vectp[this->Vertices2D[0]].Coord[1]*vectp[this->Vertices2D[1]].Coord[0]);
+             double A_23 = (vectp[this->Vertices2D[1]].Coord[0]*vectp[this->Vertices2D[2]].Coord[1]) - (vectp[this->Vertices2D[1]].Coord[1]*vectp[this->Vertices2D[2]].Coord[0]);
+             double A_31 = (vectp[this->Vertices2D[2]].Coord[0]*vectp[this->Vertices2D[0]].Coord[1]) - (vectp[this->Vertices2D[2]].Coord[1]*vectp[this->Vertices2D[0]].Coord[0]);
+             return abs((A_12+A_23+A_31)/2);
+  }
 
 
 
@@ -238,38 +286,7 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli)
   return true;
 }
 
-Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D123, vectp123, numbercell1D123, vects123, LengthEdges123, numbercell2D123, LenghtMax123, vectt123);
-
-
-double Project::Cell1D::LengthEdge(){
-    Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
-    Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
-    //double len = (coordEnd-coordOrigin).norm();
-    double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
-    return len;
-    }
-
-//PROBLEMA TOLLERANZA
-unsigned int Project::Cell2D::maxedge(){
-    unsigned int indmax = 0;
-    double max = mesh.vects[this->Edges[0]].LengthEdge();
-    for (unsigned int i = 1; i<3; i++){
-        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
-            max = mesh.vects[this->Edges[i]].LengthEdge();
-            indmax = i;
-        }
-    }
-    return this->Edges[indmax];
-
-}
-
-double Project::Cell2D::Area(){
-             //Formula dell'area di Gauss
-             double A_12 = (mesh.vectp[this->Vertices2D[0]].Coord[0]*mesh.vectp[this->Vertices2D[1]].Coord[1]) - (mesh.vectp[this->Vertices2D[0]].Coord[1]*mesh.vectp[this->Vertices2D[1]].Coord[0]);
-             double A_23 = (mesh.vectp[this->Vertices2D[1]].Coord[0]*mesh.vectp[this->Vertices2D[2]].Coord[1]) - (mesh.vectp[this->Vertices2D[1]].Coord[1]*mesh.vectp[this->Vertices2D[2]].Coord[0]);
-             double A_31 = (mesh.vectp[this->Vertices2D[2]].Coord[0]*mesh.vectp[this->Vertices2D[0]].Coord[1]) - (mesh.vectp[this->Vertices2D[2]].Coord[1]*mesh.vectp[this->Vertices2D[0]].Coord[0]);
-             return abs((A_12+A_23+A_31)/2);
-  }
+Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D123, vectp, numbercell1D123, vects, LengthEdges123, numbercell2D123, LenghtMax123, vectt);
 
 
 
@@ -438,7 +455,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
     if (markerMaxEdge == 0) {
         Cell2D& AltroTri = vectt[idAltroTri];
-        Propagazione(longest, newSegment.Id1D, AltroTri, idAltroMaxEdge, vectp, vects, vectt, Matr);
+        unsigned int recursionDepth = 0;
+        Propagazione(longest, newSegment.Id1D, AltroTri, idAltroMaxEdge, vectp, vects, vectt, Matr); // recursionDepth);
     }
 
 
@@ -446,7 +464,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 
 
-void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){
+void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){ //, unsigned int& numberRecurs){
+
     if (idLatoTagliatoVecchio == latoMax){
 
         // collega pto medio e vertice opposto
@@ -800,13 +819,19 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         // in questo caso è ricorsiva
         if (markerMaxEdgePropa == 0) {
             Cell2D& AltroTriPropa = vectt[idAltroTriPropa];
-            Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr);
+            //unsigned int recursionDepth1 = numberRecurs + 1;
+            Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr); //, recursionDepth1);
         }
     } // fine else (lato lungo diverso dal precedente)
 } // fine Propagazione
 
+//void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs){
+//    Propagazione(idLatoTagliatoVecchio, idLatoTagliatoNuovo, Triangolo, latoMax, vectp, vects, vectt, Matr, numberRecurs);
 
-} // fine namespace Cells
+//}
+
+
+ // fine namespace Cells
 
 
 //-----------------------------------------------------------------------
