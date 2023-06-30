@@ -13,10 +13,67 @@ using namespace Sorting;
 namespace Project
 {
 
-Project::TriangularMesh mesh = Project::TriangularMesh();
-Project::MatrAdiac MatriceAdiacenza = MatrAdiac(mesh.vectt, mesh.vects);
+TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
 
-void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
+    numbercell0D = numbercell0D12;
+    vectp = vectp12;
+
+    numbercell1D = numbercell1D12;
+    vects = vects12;
+    LengthEdges = LengthEdges12;
+
+    numbercell2D = numbercell2D12;
+    LenghtMax = LenghtMax12;
+    vectt = vectt12;
+};
+
+
+
+
+//void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
+
+
+Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
+    {
+    Id0D = id;
+    marker0D = marker;
+    Coord = coord;
+    };
+
+
+
+Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& vertices)
+    {
+    Id1D = id;
+    marker1D = marker;
+    Vertices1D = vertices;
+    };
+
+Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges2D)
+    {
+    Id2D = id;
+    Vertices2D = Vertices;
+    Edges = Edges2D;
+    };
+
+unsigned int numbercell0D123;
+vector<Project::Cell0D> vectp123;
+unsigned int numbercell1D123;
+vector<Project::Cell1D> vects123;
+vector<double> LengthEdges123;
+unsigned int numbercell2D123;
+std::vector<vector<unsigned int>> LenghtMax123;
+vector<Project::Cell2D> vectt123;
+
+
+
+//METODI LENEDGE, MAXEDGE, (AREA vince)
+
+// !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
+
+//metterei double anziché void
+
+
 
 
 //IMPORTAZIONE
@@ -44,9 +101,9 @@ file.close();
 
 listLines.pop_front();
 
-mesh.numbercell0D = listLines.size();
+numbercell0D123 = listLines.size();
 
-if (mesh.numbercell0D == 0)
+if (numbercell0D123 == 0)
 {
 cerr << "There is no cell 0D" << endl;
 return false;
@@ -99,9 +156,9 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati)
 
   listLines.pop_front();
 
-  mesh.numbercell1D = listLines.size();
+  numbercell1D123 = listLines.size();
 
-  if (mesh.numbercell1D == 0)
+  if (numbercell1D123 == 0)
   {
     cerr << "There is no cell 1D" << endl;
     return false;
@@ -120,7 +177,7 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati)
     converter >>  id >> marker >> vertices[0] >> vertices[1];
     Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
     vettoreLati.push_back(segment);
-    mesh.LengthEdges.push_back(segment.LengthEdge());
+    LengthEdges123.push_back(segment.LengthEdge());
 
 
   }
@@ -149,9 +206,9 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli)
   listLines.pop_front();
 
 
-  mesh.numbercell2D = listLines.size();
+  numbercell2D123 = listLines.size();
 
-  if (mesh.numbercell2D == 0)
+  if (numbercell2D123 == 0)
   {
     cerr << "There is no cell 2D" << endl;
     return false;
@@ -181,62 +238,14 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli)
   return true;
 }
 
+Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D123, vectp123, numbercell1D123, vects123, LengthEdges123, numbercell2D123, LenghtMax123, vectt123);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// COSTRUTTORI
-
-Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
-    {
-    unsigned int Id0D = id;
-    unsigned int marker0D = marker;
-    Vector2d Coord = coord;
-    };
-
-
-
-Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& vertices)
-    {
-    unsigned int Id1d = id;
-    unsigned int marker1D = marker;
-    vector<unsigned int> Vertices1d = vertices;
-    };
-
-Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges)
-    {
-    unsigned int Id2D = id;
-    array<unsigned int, 3> Vertices2D = Vertices;
-    array<unsigned int, 3> Edges2D = Edges;
-    };
-
-
-//METODI LENEDGE, MAXEDGE, (AREA vince)
-
-// !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
-
-//metterei double anziché void
 
 double Project::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
-    double len = (coordEnd-coordOrigin).norm();
-    //double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
+    //double len = (coordEnd-coordOrigin).norm();
+    double len = sqrt(pow(coordOrigin[0] - coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
     return len;
     }
 
@@ -264,6 +273,8 @@ double Project::Cell2D::Area(){
 
 
 
+
+
 //----------------------------------------------------------------------
 
 // RAFFINAMENTO:
@@ -288,11 +299,6 @@ MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& ve
 
 
 
-
-
-
-
-
 void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){
 
 
@@ -300,8 +306,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
     //serve subito controllo: 1) marker lato lungo 2) lato lungo dell'eventuale altro triangolo
     unsigned int markerMaxEdge = vects[longest].marker1D;
-    unsigned int idAltroMaxEdge = NULL;
-    unsigned int idAltroTri = NULL;
+    unsigned int idAltroMaxEdge = 0;
+    unsigned int idAltroTri = 0;
     if (markerMaxEdge == 0) {
         for (unsigned int i = 0; i<2; i++) {
             if (Matr[longest][i] != triangleToBisect.Id2D) {
@@ -332,7 +338,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     Project::Cell0D newVertex = Cell0D(newIndexpoint, markerP, midCoord);
     vectp.push_back(newVertex);
 
-    unsigned int opposite = NULL;
+    unsigned int opposite = 0;
     for(unsigned int i = 0; i < 3; i++)
     {
         if(!(vects[longest].Vertices1D[0] == triangleToBisect.Vertices2D[i] || vects[longest].Vertices1D[1] == triangleToBisect.Vertices2D[i]))
@@ -448,7 +454,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         array<unsigned int, 3> latiUltimoTri = Triangolo.Edges;
         array<unsigned int, 3> vertUltimoTri = Triangolo.Vertices2D;
 
-        unsigned int newopposite = NULL;
+        unsigned int newopposite = 0;
         for(unsigned int i = 0; i < 3; i++)
         {
             if(!(vects[idLatoTagliatoVecchio].Vertices1D[0] == Triangolo.Vertices2D[i] || vects[idLatoTagliatoNuovo].Vertices1D[1] == Triangolo.Vertices2D[i]))
@@ -550,8 +556,8 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
 
         unsigned int markerMaxEdgePropa = vects[latoMax].marker1D;
-        unsigned int idAltroMaxEdgePropa = NULL;
-        unsigned int idAltroTriPropa = NULL;
+        unsigned int idAltroMaxEdgePropa = 0;
+        unsigned int idAltroTriPropa = 0;
         if (markerMaxEdgePropa == 0) {
             for (unsigned int i = 0; i<2; i++) {
                 if (Matr[latoMax][i] != Triangolo.Id2D) {
@@ -583,7 +589,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         Project::Cell0D newVertexPropa = Cell0D(newIndexpointPropa, markerPPropa, midCoordPropa);
         vectp.push_back(newVertexPropa);
 
-        unsigned int oppositePropa = NULL;
+        unsigned int oppositePropa = 0;
         for(unsigned int i = 0; i < 3; i++)
         {
             if(!(vects[latoMax].Vertices1D[0] == Triangolo.Vertices2D[i] || vects[latoMax].Vertices1D[1] == Triangolo.Vertices2D[i]))
@@ -614,7 +620,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         vects[latoMax].Vertices1D[1] = newVertexPropa.Id0D; //GUARDATO FINO A QUI
 
 
-        unsigned int lontano = NULL;
+        unsigned int lontano = 0;
         for (unsigned int i = 0;i<3;i++) {
             if (Triangolo.Vertices2D[i] != vects[idLatoTagliatoNuovo].Vertices1D[1] && Triangolo.Vertices2D[i] != vects[idLatoTagliatoVecchio].Vertices1D[0]) {
                 lontano = Triangolo.Vertices2D[i];
