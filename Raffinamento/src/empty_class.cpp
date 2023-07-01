@@ -2,6 +2,7 @@
 #include "Eigen/Eigen"
 #include <fstream>
 #include <algorithm>
+#include "cmath"
 #include "empty_class.hpp"
 #include "sorting.hpp"
 
@@ -13,19 +14,6 @@ using namespace Project;
 
 
 
-TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
-
-    numbercell0D = numbercell0D12;
-    vectp1 = vectp12;
-
-    numbercell1D = numbercell1D12;
-    vects1 = vects12;
-    LengthEdges = LengthEdges12;
-
-    numbercell2D = numbercell2D12;
-    LenghtMax = LenghtMax12;
-    vectt1 = vectt12;
-};
 
 
 
@@ -33,7 +21,7 @@ TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cel
 //void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
 
 
-Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
+Project::Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
     {
     Id0D = id;
     marker0D = marker;
@@ -42,7 +30,7 @@ Cell0D::Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord)
 
 
 
-Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& vertices)
+Project::Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& vertices)
     {
     Id1D = id;
     marker1D = marker;
@@ -59,13 +47,28 @@ Cell1D::Cell1D(unsigned int& id,unsigned int& marker,vector<unsigned int>& verti
         }
     };
 
-Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges2D)
+Project::Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges2D)
     {
     Id2D = id;
     Vertices2D = Vertices;
     Edges = Edges2D;
     };
 
+
+
+Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
+
+    numbercell0D = numbercell0D12;
+    vectp1 = vectp12;
+
+    numbercell1D = numbercell1D12;
+    vects1 = vects12;
+    LengthEdges = LengthEdges12;
+
+    numbercell2D = numbercell2D12;
+    LenghtMax = LenghtMax12;
+    vectt1 = vectt12;
+};
 
 
 
@@ -302,14 +305,16 @@ Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D123, vectp, n
 // TAGLIO LATO LUNGO
 
 
-MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects) {
-    vector<vector<unsigned int>> MatrAdiac(vects.size(), vector<unsigned int>());
+//MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects) {
+vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects){
+    vector<vector<unsigned int>> MatrAdiac1(vects.size(), vector<unsigned int>());
     for (unsigned int i = 0; i < vectt.size(); i++) {
         for (unsigned int j = 0; j < 3; j++) {
-            MatrAdiac[vectt[i].Edges[j]].push_back(vectt[i].Id2D);
+            MatrAdiac1[vectt[i].Edges[j]].push_back(vectt[i].Id2D);
         }
     }
-    Matr = MatrAdiac;
+    return MatrAdiac1;
+    //Matr = MatrAdiac;
 }
 
 
@@ -456,7 +461,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     if (markerMaxEdge == 0) {
         Cell2D& AltroTri = vectt[idAltroTri];
         unsigned int recursionDepth = 0;
-        Propagazione(longest, newSegment.Id1D, AltroTri, idAltroMaxEdge, vectp, vects, vectt, Matr); // recursionDepth);
+        Project::Propagazione(longest, newSegment.Id1D, AltroTri, idAltroMaxEdge, vectp, vects, vectt, Matr); // recursionDepth);
     }
 
 
@@ -820,7 +825,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         if (markerMaxEdgePropa == 0) {
             Cell2D& AltroTriPropa = vectt[idAltroTriPropa];
             //unsigned int recursionDepth1 = numberRecurs + 1;
-            Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr); //, recursionDepth1);
+            Project::Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr); //, recursionDepth1);
         }
     } // fine else (lato lungo diverso dal precedente)
 } // fine Propagazione
