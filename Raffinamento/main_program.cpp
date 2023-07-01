@@ -1,3 +1,8 @@
+#include <iostream>
+#include "Eigen/Eigen"
+#include <fstream>
+#include <algorithm>
+#include "cmath"
 #include "empty_class.hpp"
 #include "sorting.hpp"
 
@@ -32,13 +37,14 @@ int main()
     //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
     Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D, vectp, numbercell1D, vects, LengthEdges, numbercell2D, LenghtMax, vectt);
-    Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(vectt, vects);
+    vector<vector<unsigned int>> Matr = MatrAdiac(vectt, vects);
+    //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(vectt, vects);
 
     for (int iter = 0; iter<20; iter++) {
         HeapSort(vectSupp, vectt);
         for (int i = 0; i < 20; i++) {
             Project::Cell2D& trisupp = vectSupp[i];
-            Bisect(trisupp, vectp, vects, vectt, MatriceAdiacenza.Matr);
+            Bisect(trisupp, vectp, vects, vectt, Matr);   //, MatriceAdiacenza.Matr);
         }
     }
 
