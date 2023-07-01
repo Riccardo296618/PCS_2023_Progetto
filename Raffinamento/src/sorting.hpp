@@ -2,7 +2,11 @@
 #define SORTING_HPP
 
 
+#include <iostream>
 #include "Eigen/Eigen"
+#include <fstream>
+#include <algorithm>
+#include "cmath"
 
 
 using namespace std;
