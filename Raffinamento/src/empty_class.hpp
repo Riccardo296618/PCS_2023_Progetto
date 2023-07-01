@@ -15,6 +15,8 @@
 #include <iostream>
 #include "Eigen/Eigen"
 #include <fstream>
+#include <algorithm>
+#include "cmath"
 
 using namespace std;
 using namespace Eigen;
@@ -78,20 +80,19 @@ namespace Project {
     extern vector<Project::Cell1D> vects;
     extern vector<Project::Cell2D> vectt;
 
-    class MatrAdiac{
-    public:
-        vector<vector<unsigned int>> Matr;
-        MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
-    };
-
-
-
+    //class MatrAdiac{
+    //public:
+    //    vector<vector<unsigned int>> Matr;
+    //    MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
+    //};
 
 
 
     bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
     bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati);
     bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli);
+
+    vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
 
     void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
     void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); //, unsigned int& numberRecurs);
