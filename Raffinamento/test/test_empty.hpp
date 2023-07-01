@@ -1,12 +1,18 @@
 #ifndef __TEST_EMPTY_H
 #define __TEST_EMPTY_H
 
+#include <iostream>
+#include "Eigen/Eigen"
+#include <fstream>
+#include <algorithm>
+#include "cmath"
 #include <gtest/gtest.h>
 
 #include "empty_class.hpp"
 #include "sorting.hpp"
 
 using namespace testing;
+using namespace Sorting;
 using namespace Project;
 
 // constr x3
@@ -231,7 +237,8 @@ TEST(TestRefinment, TestBisectEPropagation)
     Cell2D triT1 = Cell2D(idTriT1, verTri1, edgTri1), triT2 = Cell2D(idTriT2, verTri2, edgTri2), triT3 = Cell2D(idTriT3, verTri3, edgTri3), triT4 = Cell2D(idTriT4, verTri4, edgTri4);
     vector<Project::Cell2D> vecttT = {triT1, triT2, triT3, triT4};
 
-    vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT).Matr;
+    //vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT).Matr;
+    vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
 
 
     Project::Cell2D& trisupp1T = vecttT[0];
