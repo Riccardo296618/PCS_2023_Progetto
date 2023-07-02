@@ -62,18 +62,18 @@ namespace Project {
     class TriangularMesh{
     public:
         unsigned int numbercell0D;
-        vector<Cells::Cell0D> vectp = {};
+        vector<Project::Cell0D> vectp = {};
 
 
 
         unsigned int numbercell1D;
-        vector<Cells::Cell1D> vects = {};
+        vector<Project::Cell1D> vects = {};
         vector<double> LengthEdges = {};
 
 
         unsigned int numbercell2D;
         std::vector<vector<unsigned int>> LenghtMax = {};
-        vector<Cells::Cell2D> vectt = {};
+        vector<Project::Cell2D> vectt = {};
 
     };
 
@@ -89,7 +89,7 @@ namespace Project {
     bool ImportCell1Ds();
     bool ImportCell2Ds();
 
-   void Bisect(Cells::Cell2D triangleToBisect);
+   void Bisect(Project::Cell2D triangleToBisect);
    void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax);
 
     // tolleranze
