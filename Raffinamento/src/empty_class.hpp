@@ -24,6 +24,8 @@ using namespace Eigen;
 namespace Project {
 
 
+
+
     class Cell0D {
 
 
@@ -31,7 +33,7 @@ namespace Project {
             unsigned int marker0D;
             unsigned int Id0D;
             Vector2d Coord;
-            Cell0D(unsigned int& id, unsigned int& marker, Vector2d& coord);
+        Cell0D(unsigned int id, unsigned int marker, Vector2d coord);
         };
 
 
@@ -41,17 +43,18 @@ namespace Project {
             unsigned int marker1D;
             unsigned int Id1D;
             vector<unsigned int> Vertices1D;
-            Cell1D(unsigned int& id, unsigned int& marker, vector<unsigned int>& vertices);
+            Cell1D(unsigned int id, unsigned int marker, Vector2i vertices);
             double LengthEdge();
  };
 
 
     class Cell2D{
         public:
+            unsigned int LengthEdges;
             unsigned int Id2D;
             array<unsigned int, 3> Vertices2D;
             array<unsigned int, 3> Edges;
-            Cell2D(unsigned int& id, array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges);
+            Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges);
             unsigned int maxedge();
             double Area();
         };
@@ -59,45 +62,35 @@ namespace Project {
     class TriangularMesh{
     public:
         unsigned int numbercell0D;
-        vector<Project::Cell0D> vectp1;
+        vector<Cells::Cell0D> vectp = {};
 
 
 
         unsigned int numbercell1D;
-        vector<Project::Cell1D> vects1;
-        vector<double> LengthEdges;
+        vector<Cells::Cell1D> vects = {};
+        vector<double> LengthEdges = {};
 
 
         unsigned int numbercell2D;
-        std::vector<vector<unsigned int>> LenghtMax;
-        vector<Project::Cell2D> vectt1;
-
-        TriangularMesh(unsigned int& numbercell0D1, vector<Project::Cell0D>& vectp1, unsigned int& numbercell1D1, vector<Project::Cell1D>& vects1, vector<double>& LengthEdges1, unsigned int& numbercell2D1, std::vector<vector<unsigned int>>& LenghtMax1, vector<Project::Cell2D>& vectt1);
+        std::vector<vector<unsigned int>> LenghtMax = {};
+        vector<Cells::Cell2D> vectt = {};
 
     };
 
-    extern vector<Project::Cell0D> vectp;
-    extern vector<Project::Cell1D> vects;
-    extern vector<Project::Cell2D> vectt;
+    class MatrAdiac{
+    public:
+        vector<vector<unsigned int>> Matr;
+        MatrAdiac();
+    };
 
-    //class MatrAdiac{
-    //public:
-    //    vector<vector<unsigned int>> Matr;
-    //    MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
-    //};
+ }
+   
+    bool ImportCell0Ds();
+    bool ImportCell1Ds();
+    bool ImportCell2Ds();
 
-
-
-    bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti);
-    bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati);
-    bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli);
-
-    vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
-
-    void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
-    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); //, unsigned int& numberRecurs);
-    //void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs);
-
+   void Bisect(Cells::Cell2D triangleToBisect);
+   void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax);
 
     // tolleranze
     constexpr double max_tol(const double& x, const double& y)
