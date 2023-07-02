@@ -121,7 +121,7 @@ TEST(TestMetodi, TestLengthEdge)
     Vector2d CoordT1 = {0, 0};
     Vector2d CoordT3 = {4, 3};
 
-    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1);
+    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3);;
     vector<Project::Cell0D> vectpT = {vertT1, vertT3};
 
     vector<unsigned int> verEdg3 = {vertT3.Id0D, vertT1.Id0D};
@@ -245,8 +245,8 @@ TEST(TestRefinment, TestBisectEPropagation)
 
     Project::Cell2D& trisupp1T = vecttT[0];
     Project::Cell2D& trisupp2T = vecttT[1];
-    Bisect(trisupp1T);
-    Bisect(trisupp2T);
+    Bisect(trisupp1T, vectpT, vectsT, vecttT, MatrAd); // lato lungo esterno -> non parte propagazione
+    Bisect(trisupp2T, vectpT, vectsT, vecttT, MatrAd);
 
     //area tri 1 = 5
     //area tri 6 = 4.5
