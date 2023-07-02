@@ -298,7 +298,7 @@ MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& ve
 
 
 
-void Bisect(Project::Cell2D& triangleToBisect){
+void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr){
 
 
     unsigned int longest = triangleToBisect.maxedge();
@@ -436,8 +436,8 @@ void Bisect(Project::Cell2D& triangleToBisect){
     }
 
     if (markerMaxEdge == 0) {
-        Cell2D& AltroTri = vectt[idAltroTri];
-        Propagazione(longest, newSegment.Id1D, mesh.vectt[idAltroTri], idAltroMaxEdge);
+        Cell2D AltroTri = vectt[idAltroTri];
+        Propagazione(longest, newSegment.Id1D, AltroTri, idAltroMaxEdge, vectp, vects, vectt, Matr);
     }
 
 
@@ -445,7 +445,7 @@ void Bisect(Project::Cell2D& triangleToBisect){
 
 
 
-void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax){
+void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr){
 
     if (idLatoTagliatoVecchio == latoMax){ //Parte Umberto
 
@@ -799,7 +799,8 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         // void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax){
         // in questo caso è ricorsiva
         if (markerMaxEdgePropa == 0) {
-            Propagazione(latoMax, newSegmentPropa.Id1D, mesh.vectt[idAltroTriPropa], idAltroMaxEdgePropa);
+            Cell2D AltroTriPropa = vectt[idAltroTriPropa];
+            Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr);
         }
     } // fine else (lato lungo diverso dal precedente)
 } // fine Propagazione
