@@ -7,14 +7,14 @@ int main()
 
     vector<Cells::Cell2D> vectSupp;
 
-    unsigned int numbercell0D12 = 0;
-    vector<Project::Cell0D> vectp12;
-    unsigned int numbercell1D12 = 0;
-    vector<Project::Cell1D> vects12;
-    vector<double> LengthEdges12;
-    unsigned int numbercell2D12 = 0;
-    std::vector<vector<unsigned int>> LenghtMax12;
-    vector<Project::Cell2D> vectt12;
+    unsigned int numbercell0D;
+    vector<Project::Cell0D> vectp;
+    unsigned int numbercell1D;
+    vector<Project::Cell1D> vects;
+    vector<double> LengthEdges;
+    unsigned int numbercell2D;
+    std::vector<vector<unsigned int>> LenghtMax;
+    vector<Project::Cell2D> vectt;
 
 
     Project::ImportCell0Ds();
