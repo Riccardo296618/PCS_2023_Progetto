@@ -67,7 +67,7 @@ TEST(TestImport, TestCell0D)
 
     Vector2d coord3T = {0.0000000000000000e+00, 0.655};
 
-    if(ImportCell0Ds(vectpT)){
+    if(ImportCell0Ds()){
         EXPECT_EQ(vectpT[0].marker0D, 1);
         EXPECT_EQ(vectpT[2].Id0D, 2);
         EXPECT_EQ(vectpT[3].Coord, coord3T);
@@ -81,7 +81,7 @@ TEST(TestImport, TestCell1D)
 
     vector<Project::Cell1D> vectsT;
 
-    if(ImportCell1Ds(vectsT)){
+    if(ImportCell1Ds()){
         EXPECT_EQ(vectsT[0].marker1D, 0);
         EXPECT_EQ(vectsT[2].Id1D, 2);
         EXPECT_EQ(vectsT[3].Vertices1D[0], 23);
@@ -96,7 +96,7 @@ TEST(TestImport, TestCell2D)
 
     vector<Project::Cell2D> vecttT;
 
-    if(ImportCell2Ds(vecttT)){
+    if(ImportCell2Ds()){
         EXPECT_EQ(vecttT[0].Id2D, 41);
         EXPECT_EQ(vecttT[1].Vertices2D[0], 23);
         EXPECT_EQ(vecttT[2].Vertices2D[1], 51);
@@ -121,7 +121,7 @@ TEST(TestMetodi, TestLengthEdge)
     Vector2d CoordT1 = {0, 0};
     Vector2d CoordT3 = {4, 3};
 
-    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3);
+    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1);
     vector<Project::Cell0D> vectpT = {vertT1, vertT3};
 
     vector<unsigned int> verEdg3 = {vertT3.Id0D, vertT1.Id0D};
@@ -225,6 +225,8 @@ TEST(TestRefinment, TestBisectEPropagation)
     Vector2d CoordT4 = {0, 4};
     Vector2d CoordT5 = {1, 1};
 
+    // triangolo Riccardo
+  
     Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
     vector<Project::Cell0D> vectpT = {vertT1, vertT2, vertT3, vertT4, vertT5};
 
@@ -243,8 +245,8 @@ TEST(TestRefinment, TestBisectEPropagation)
 
     Project::Cell2D& trisupp1T = vecttT[0];
     Project::Cell2D& trisupp2T = vecttT[1];
-    Bisect(trisupp1T, vectpT, vectsT, vecttT, MatrAd); // lato lungo esterno -> non parte propagazione
-    Bisect(trisupp2T, vectpT, vectsT, vecttT, MatrAd);
+    Bisect(trisupp1T);
+    Bisect(trisupp2T);
 
     //area tri 1 = 5
     //area tri 6 = 4.5
