@@ -73,7 +73,7 @@ double Project::Cell1D::LengthEdge(){
     }
 
 //PROBLEMA TOLLERANZA
-unsigned int Project::Cell2D::maxedge(){
+unsigned int Project::Cell2D::maxedge(){ // Check Umberto
     unsigned int indmax = 0;
     double max = vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
@@ -95,8 +95,6 @@ double Project::Cell2D::Area(){
   }
 
 
-
-//METODI LENEDGE, MAXEDGE, (AREA vince)
 
 // !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
 
@@ -321,7 +319,7 @@ void Bisect(Project::Cell2D& triangleToBisect){
     }
 
 
-    // salvo vertici e lati che poi dovrò aggiornare
+    // salvo vertici e lati che poi dovrò aggiornare [Umberto]
     array<unsigned int, 3> latiTriNuovo = triangleToBisect.Edges;
     array<unsigned int, 3> vertTriNuovo = triangleToBisect.Vertices2D;
     // inizio bisezione
@@ -368,7 +366,7 @@ void Bisect(Project::Cell2D& triangleToBisect){
 
 
 
-    //Creo segm pto medio -> end vecchia
+    //Creo segm pto medio -> end vecchia 
     Cell1D newSegment = Cell1D(idNewEdge2, vects[longest].marker1D, NewSegVert);
     vects.push_back(newSegment);
 
@@ -451,7 +449,7 @@ void Bisect(Project::Cell2D& triangleToBisect){
 
 void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax){
 
-    if (idLatoTagliatoVecchio == latoMax){
+    if (idLatoTagliatoVecchio == latoMax){ //Parte Umberto
 
         // collega pto medio e vertice opposto
 
@@ -537,7 +535,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 
 
     } //fine if (stesso lato max)
-    else {
+    else { //Riccardo [Umberto checked]
 
 
         // va fatto un if che mette l'end di latoMax = end latotagliatonuovo (caso 1)
