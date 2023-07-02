@@ -30,11 +30,11 @@ Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
 
 
 
-Cell1D::Cell1D(unsigned int id,unsigned int marker,Vector2i vertices)
+Cell1D::Cell1D(unsigned int id,unsigned int marker,vector<unsigned int> vertices)
     {
     unsigned int Id1d = id;
     unsigned int marker1D = marker;
-    Vector2i Vertices1d = vertices;
+    vector<unsigned int> Vertices1d = vertices;
     };
 
 Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
@@ -65,8 +65,8 @@ Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Pro
 
 
 double Project::Cell1D::LengthEdge(){
-    Vector2d coordOrigin = vectp[this->Vertices1D[0]].Coord;
-    Vector2d coordEnd= vectp[this->Vertices1D[1]].Coord;
+    Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
+    Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
     //double len = (coordEnd-coordOrigin).norm();
     double len = sqrt(pow(coordOrigin.x() - coordEnd.x(), 2)+pow(coordOrigin.y() - coordEnd.y(), 2));
     return len;
@@ -75,10 +75,10 @@ double Project::Cell1D::LengthEdge(){
 //PROBLEMA TOLLERANZA
 unsigned int Project::Cell2D::maxedge(){ // Check Umberto
     unsigned int indmax = 0;
-    double max = vects[this->Edges[0]].LengthEdge();
+    double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
-            max = vects[this->Edges[i]].LengthEdge();
+        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
+            max = mesh.vects[this->Edges[i]].LengthEdge();
             indmax = i;
         }
     }
