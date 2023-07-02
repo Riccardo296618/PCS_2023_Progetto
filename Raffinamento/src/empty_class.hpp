@@ -43,7 +43,7 @@ namespace Project {
             unsigned int marker1D;
             unsigned int Id1D;
             vector<unsigned int> Vertices1D;
-            Cell1D(unsigned int id, unsigned int marker, Vector2i vertices);
+            Cell1D(unsigned int id, unsigned int marker, vector<unsigned int> vertices);
             double LengthEdge();
  };
 
@@ -89,8 +89,8 @@ namespace Project {
     bool ImportCell1Ds();
     bool ImportCell2Ds();
 
-   void Bisect(Project::Cell2D triangleToBisect);
-   void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax);
+  void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr);
+  void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr)
 
     // tolleranze
     constexpr double max_tol(const double& x, const double& y)
