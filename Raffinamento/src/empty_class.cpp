@@ -284,16 +284,14 @@ bool ImportCell2Ds()
 // TAGLIO LATO LUNGO
 
 
-//MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects) {
-vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects){
-    vector<vector<unsigned int>> MatrAdiac1(vects.size(), vector<unsigned int>());
+MatrAdiac::MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects) {
+    vector<vector<unsigned int>> MatrAdiac(vects.size(), vector<unsigned int>());
     for (unsigned int i = 0; i < vectt.size(); i++) {
         for (unsigned int j = 0; j < 3; j++) {
             MatrAdiac1[vectt[i].Edges[j]].push_back(vectt[i].Id2D);
         }
     }
-    return MatrAdiac1;
-    //Matr = MatrAdiac;
+    Matr = MatrAdiac;
 }
 
 
