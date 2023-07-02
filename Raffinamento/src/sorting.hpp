@@ -2,11 +2,7 @@
 #define SORTING_HPP
 
 
-#include <iostream>
 #include "Eigen/Eigen"
-#include <fstream>
-#include <algorithm>
-#include "cmath"
 
 
 using namespace std;
@@ -16,7 +12,7 @@ namespace Sorting
 {
 
 template <typename T>
-void MakeHeap(vector<T> vecttSupp, int i){
+void MakeHeap(vector<T>& vecttSupp, int i){
 
 
 
@@ -42,7 +38,7 @@ void MakeHeap(vector<T> vecttSupp, int i){
 }
 
 template<typename T>
-void HeapSort(vector<T> vecttSupp, vector<T> vectt){
+void HeapSort(vector<T>& vecttSupp, vector<T>& vectt){
 
     vecttSupp.clear();
     for (unsigned int k = 0; k < vectt.size(); k++){
@@ -60,6 +56,10 @@ void HeapSort(vector<T> vecttSupp, vector<T> vectt){
     }
 }
 }
+
+
+
+#endif // SORTING_HPP
 
 
 
