@@ -149,7 +149,7 @@ Vector2d coord;
 converter >>  id >> marker >> coord(0) >> coord(1);
 
 
-Cells::Cell0D point = Cells::Cell0D(id,marker,coord);
+Project::Cell0D point = Project::Cell0D(id,marker,coord);
 mesh.vectp.push_back(point);
 
 //    if( marker != 0)
@@ -200,7 +200,7 @@ bool ImportCell1Ds()
     Vector2i vertices;
 
     converter >>  id >> marker >> vertices(0) >> vertices(1);
-    Cells::Cell1D segment = Cells::Cell1D(id,marker,vertices);
+    Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
     mesh.vects.push_back(segment);
     mesh.LengthEdges.push_back(segment.LengthEdge());
 
@@ -262,7 +262,7 @@ bool ImportCell2Ds()
     for(unsigned int i = 0; i < 3; i++)
       converter >> edges[i];
 
-    Cells::Cell2D triangle = Cells::Cell2D(id,vertices,edges);
+    Project::Cell2D triangle = Project::Cell2D(id,vertices,edges);
     mesh.vectt.push_back(triangle);
 
   }
