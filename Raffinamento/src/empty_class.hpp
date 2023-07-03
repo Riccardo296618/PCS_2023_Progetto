@@ -80,7 +80,7 @@ namespace Project {
     class MatrAdiac{
     public:
         vector<vector<unsigned int>> Matr;
-        MatrAdiac();
+        MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects);
     };
 
  }
