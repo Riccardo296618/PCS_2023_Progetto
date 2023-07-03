@@ -47,7 +47,7 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 
 
 
-Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
+Project::TriangularMesh::TriangularMesh(unsigned int numbercell0D12, vector<Project::Cell0D> vectp12, unsigned int numbercell1D12, vector<Project::Cell1D> vects12, vector<double> LengthEdges12, unsigned int numbercell2D12, std::vector<vector<unsigned int>> LenghtMax12, vector<Project::Cell2D> vectt12){
 
     unsigned int numbercell0D = numbercell0D12;
     vector<Project::Cell0D> vectp = vectp12;
