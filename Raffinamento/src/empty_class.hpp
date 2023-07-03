@@ -75,8 +75,7 @@ namespace Project {
         std::vector<vector<unsigned int>> LenghtMax = {};
         vector<Project::Cell2D> vectt = {};
 
-        Project::TriangularMesh(unsigned int numbercell0D12, vector<Project::Cell0D> vectp12, unsigned int numbercell1D12, vector<Project::Cell1D> vects12, vector<double> LengthEdges12, unsigned int numbercell2D12, std::vector<vector<unsigned int>> LenghtMax12, vector<Project::Cell2D> vectt12);
-
+        TriangularMesh() = default;
     };
 
     class MatrAdiac{
