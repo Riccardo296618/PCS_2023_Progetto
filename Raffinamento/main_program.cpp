@@ -1,4 +1,5 @@
 #include "empty_class.hpp"
+#include "sorting.hpp"
 
 
 
@@ -16,6 +17,7 @@ int main()
     std::vector<vector<unsigned int>> LenghtMax;
     vector<Project::Cell2D> vectt;
 
+    Project::TriangularMesh mesh = Project::TriangularMesh();
 
     Project::ImportCell0Ds();
     Project::ImportCell1Ds();
@@ -23,7 +25,7 @@ int main()
     Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
    for (int iter = 0; iter<20; iter++) {
-        HeapSort(vectSupp, Project::mesh.vectt);
+        Sorting::HeapSort(vectSupp, vectt);
         for (int i = 0; i < 20; i++) {
             Project::Cell2D& trisupp = vectSupp[i];
             Bisect(trisupp, mesh.vectp, mesh.vects, mesh.vectt, MatriceAdiacenza.Matr);
