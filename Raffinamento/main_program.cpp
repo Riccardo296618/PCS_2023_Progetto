@@ -6,7 +6,7 @@
 int main()
 {
 
-    vector<Cells::Cell2D> vectSupp;
+    vector<Project::Cell2D> vectSupp;
 
     unsigned int numbercell0D;
     vector<Project::Cell0D> vectp;
@@ -19,9 +19,9 @@ int main()
 
     Project::TriangularMesh mesh = Project::TriangularMesh();
 
-    Project::ImportCell0Ds();
-    Project::ImportCell1Ds();
-    Project::ImportCell2Ds();
+    ImportCell0Ds();
+    ImportCell1Ds();
+    ImportCell2Ds();
     Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
    for (int iter = 0; iter<20; iter++) {
