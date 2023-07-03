@@ -15,7 +15,7 @@ using namespace Project;
 
 
 
-
+Project::TriangularMesh mesh = Project::TriangularMesh();
 
 
 //void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax);
