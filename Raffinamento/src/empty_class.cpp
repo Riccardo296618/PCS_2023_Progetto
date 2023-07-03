@@ -197,9 +197,9 @@ bool ImportCell1Ds()
 
     unsigned int id;
     unsigned int marker;
-    Vector2i vertices;
+    vector<unsigned int> vertices;
 
-    converter >>  id >> marker >> vertices(0) >> vertices(1);
+    converter >>  id >> marker >> vertices[0] >> vertices[1];
     Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
     mesh.vects.push_back(segment);
     mesh.LengthEdges.push_back(segment.LengthEdge());
