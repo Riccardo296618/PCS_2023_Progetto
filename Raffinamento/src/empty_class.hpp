@@ -90,7 +90,7 @@ namespace Project {
     bool ImportCell2Ds();
 
   void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr);
-  void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr)
+  void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr);
 
     // tolleranze
     constexpr double max_tol(const double& x, const double& y)
@@ -102,19 +102,19 @@ namespace Project {
     static constexpr double tol2D = max_tol(tol1D * tol1D, numeric_limits<double>::epsilon());
 
 
-    inline bool operator<(Cell2D& t1,  Cell2D& t2)
+    inline bool operator<(Project::Cell2D& t1,  Project::Cell2D& t2)
     {
       return t1.Area() < t2.Area() + tol2D * max(t1.Area(), t2.Area());
     }
 
-    inline bool operator>=(Cell2D& t1,Cell2D& t2)
+    inline bool operator>=(Project::Cell2D& t1,Project::Cell2D& t2)
     {
       return !(t1 < t2);
     }
 
 
 
- }
+ 
 
 
 #endif // __EMPTY_H
