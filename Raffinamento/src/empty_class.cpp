@@ -46,6 +46,10 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 
 
 
+
+
+
+
 double Project::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
@@ -54,12 +58,11 @@ double Project::Cell1D::LengthEdge(){
     return len;
     }
 
-//PROBLEMA TOLLERANZA
-unsigned int Project::Cell2D::maxedge(){ // Check Umberto
+unsigned int Project::Cell2D::maxedge(){ 
     unsigned int indmax = 0;
     double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){  // check
+        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){ 
             max = mesh.vects[this->Edges[i]].LengthEdge();
             indmax = i;
         }
@@ -75,6 +78,10 @@ double Project::Cell2D::Area(){
              double A_31 = (mesh.vectp[this->Vertices2D[2]].Coord[0]*mesh.vectp[this->Vertices2D[0]].Coord[1]) - (mesh.vectp[this->Vertices2D[2]].Coord[1]*mesh.vectp[this->Vertices2D[0]].Coord[0]);
              return abs((A_12+A_23+A_31)/2);
   }
+
+
+
+
 
 
 
