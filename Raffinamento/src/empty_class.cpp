@@ -72,9 +72,9 @@ unsigned int Project::Cell2D::maxedge(){
 
 double Project::Cell2D::Area(){
              //Formula dell'area di Gauss
-             double A_12 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
-             double A_23 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
-             double A_31 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
+             double A_12 = (mesh.vectp[this->Vertices2D[0]].Coord[0]*mesh.vectp[this->Vertices2D[1]].Coord[1]) - (mesh.vectp[this->Vertices2D[0]].Coord[1]*mesh.vectp[this->Vertices2D[1]].Coord[0]);
+             double A_23 = (mesh.vectp[this->Vertices2D[1]].Coord[0]*mesh.vectp[this->Vertices2D[2]].Coord[1]) - (mesh.vectp[this->Vertices2D[1]].Coord[1]*mesh.vectp[this->Vertices2D[2]].Coord[0]);
+             double A_31 = (mesh.vectp[this->Vertices2D[2]].Coord[0]*mesh.vectp[this->Vertices2D[0]].Coord[1]) - (mesh.vectp[this->Vertices2D[2]].Coord[1]*mesh.vectp[this->Vertices2D[0]].Coord[0]);
              return abs((A_12+A_23+A_31)/2);
   }
 
