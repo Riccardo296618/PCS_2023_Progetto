@@ -1,14 +1,3 @@
-//{
-// class Empty
-//  {
-//    public:
-//      void Show() const { std::cout<< "Hello world;"<< std::endl; }
-//  };
-//}
-//
-//#endif // __EMPTY_H
-
-
 #ifndef __EMPTY_H
 #define __EMPTY_H
 
@@ -50,14 +39,20 @@ namespace Project {
 
     class Cell2D{
         public:
-            unsigned int LengthEdges;
             unsigned int Id2D;
-            array<unsigned int, 3> Vertices2D;
+            vector<Project::Cell0D> vectp2D;
             array<unsigned int, 3> Edges;
             Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges);
             unsigned int maxedge();
             double Area();
         };
+
+
+
+
+
+
+
 
     class TriangularMesh{
     public:
