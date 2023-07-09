@@ -39,10 +39,11 @@ namespace Project {
 
     class Cell2D{
         public:
+            unsigned int LengthEdges;
             unsigned int Id2D;
-            vector<Project::Cell0D> vectp2D;
+            array<unsigned int, 3> Vertices2D;
             array<unsigned int, 3> Edges;
-            Cell2D(unsigned int id, vector<Project::Cell0D> vectp2D, array<unsigned int, 3> Edges);
+            Cell2D(unsigned int id, array<unsigned int, 3> Vertices2D, array<unsigned int, 3> Edges);
             unsigned int maxedge();
             double Area();
         };
