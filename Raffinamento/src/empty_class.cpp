@@ -60,10 +60,10 @@ double Project::Cell1D::LengthEdge(){
 
 unsigned int Project::Cell2D::maxedge(){ 
     unsigned int indmax = 0;
-    double max = vects[this->Edges[0]].LengthEdge();
+    double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(vects[this->Edges[i]].LengthEdge()  > max - tol1D){ 
-            max = vects[this->Edges[i]].LengthEdge();
+        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){ 
+            max = mesh.vects[this->Edges[i]].LengthEdge();
             indmax = i;
         }
     }
