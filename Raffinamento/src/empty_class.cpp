@@ -51,19 +51,18 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 
 
 double Project::Cell1D::LengthEdge(){
-    Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
-    Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
-    //double len = (coordEnd-coordOrigin).norm();
+    Vector2d coordOrigin = vectp[this->Vertices1D[0]].Coord;
+    Vector2d coordEnd= vectp[this->Vertices1D[1]].Coord;
     double len = sqrt(pow(coordOrigin.x() - coordEnd.x(), 2)+pow(coordOrigin.y() - coordEnd.y(), 2));
     return len;
     }
 
 unsigned int Project::Cell2D::maxedge(){ 
     unsigned int indmax = 0;
-    double max = mesh.vects[this->Edges[0]].LengthEdge();
+    double max = vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
-        if(mesh.vects[this->Edges[i]].LengthEdge()  > max - tol1D){ 
-            max = mesh.vects[this->Edges[i]].LengthEdge();
+        if(vects[this->Edges[i]].LengthEdge()  > max - tol1D){ 
+            max = vects[this->Edges[i]].LengthEdge();
             indmax = i;
         }
     }
@@ -73,9 +72,9 @@ unsigned int Project::Cell2D::maxedge(){
 
 double Project::Cell2D::Area(){
              //Formula dell'area di Gauss
-             double A_12 = (mesh.vectp[this->Vertices2D[0]].Coord[0]*mesh.vectp[this->Vertices2D[1]].Coord[1]) - (mesh.vectp[this->Vertices2D[0]].Coord[1]*mesh.vectp[this->Vertices2D[1]].Coord[0]);
-             double A_23 = (mesh.vectp[this->Vertices2D[1]].Coord[0]*mesh.vectp[this->Vertices2D[2]].Coord[1]) - (mesh.vectp[this->Vertices2D[1]].Coord[1]*mesh.vectp[this->Vertices2D[2]].Coord[0]);
-             double A_31 = (mesh.vectp[this->Vertices2D[2]].Coord[0]*mesh.vectp[this->Vertices2D[0]].Coord[1]) - (mesh.vectp[this->Vertices2D[2]].Coord[1]*mesh.vectp[this->Vertices2D[0]].Coord[0]);
+             double A_12 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
+             double A_23 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
+             double A_31 = (vectp2D[0].Coord[0]*vectp2D[0].Coord[1]) - (vectp2D[0].Coord[1]*vectp2D[0].Coord[0]);
              return abs((A_12+A_23+A_31)/2);
   }
 
