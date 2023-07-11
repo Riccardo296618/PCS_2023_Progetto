@@ -27,7 +27,7 @@ int main()
    for (int iter = 0; iter<20; iter++) {
         Sorting::HeapSort(vectSupp, vectt);
         for (int i = 0; i < 20; i++) {
-            Project::Cell2D& trisupp = vectSupp[i];
+            Project::Cell2D trisupp = vectSupp[i];
             Bisect(trisupp, mesh.vectp, mesh.vects, mesh.vectt, MatriceAdiacenza.Matr);
         }
 
